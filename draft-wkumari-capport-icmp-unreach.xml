@@ -3,7 +3,7 @@
 <!ENTITY rfc2119 PUBLIC "" ".//reference.RFC.2119.xml">
 ]>
 <!-- WK: Set category, IPR, docName -->
-<rfc category="info" docName="draft-wkumari-capport-icmp-unreach-00"
+<rfc category="info" docName="draft-wkumari-capport-icmp-unreach-01"
      ipr="trust200902">
   <?xml-stylesheet type='text/xsl' href='rfc2629.xslt' ?>
 
@@ -68,8 +68,9 @@
     <workgroup>template</workgroup>
 
     <abstract>
-      <t>This document defines a multi-part ICMP extension to signal that a
-      user's device is behind a Captive Portal.</t>
+      <t>This document defines a multi-part ICMP extension to ICMP Destination
+      Unreachable messages to signal that a user is behind a Captive
+      Portal.</t>
 
       <t>[ Editor note: The IETF is currently discussing improvements in
       captive portal interactions and user experience improvements. See:
@@ -108,7 +109,7 @@
       <t>[ Editor note: This is complementary, but solves a different problem
       to: https://tools.ietf.org/html/draft-wkumari-dhc-capport-12 -
       wkumari-dhc-capport provides information from a DHCP server (and so
-      doesn't need any changes to deployed CPs, and provides information
+      doesn't need any changes to deployed CPs), and provides information
       *before* the client attempts a connection. It does not, however, have a
       way of noting that an existing connection has been interrupted.]</t>
 
@@ -124,8 +125,7 @@
       <t>This document defines an extension object that can be appended to
       selected multi-part ICMP messages (<xref target="RFC4884"/>). This
       extension permits Captive Portal (CP) NAS devices to inform user devices
-      that their connection has been blocked by the Captive Portal NAS, and,
-      optionally, how to contact the Captive Portal to satisfy it.</t>
+      that their connection has been blocked by the Captive Portal NAS.</t>
 
       <t>The Dest Unreachable Captive Portal Object can be appended to the
       ICMP Destination Unreachable messages. Figure 1 depicts the Dest
@@ -139,14 +139,11 @@
       +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
       |W|  Reserved   |         Validity (seconds)                    |
       +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-      |                       Captive Portal URL                      ~
-      ~                           (optional)                          |
-      +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+]]></artwork>
+
+]]></artwork>
       </figure>
 
       <t><list style="hanging">
-          <t/>
-
           <t hangText="W  - 1 bit">Warning. Indicates that the Validity refers
           to when the service will be interrupted. Note that the
           &ldquo;offending&rdquo; traffic was forwarded, not dropped.</t>
@@ -154,14 +151,6 @@
           <t hangText="Validity - 24 bits">Time, in seconds, that this result
           should be considered valid (and the OS should not attempt to access
           the same resource in the meantime).</t>
-
-          <t hangText="Captive Portal URL - Variable">The optional URL of the
-          Captive Portal. This allows Captive Portal detection software
-          running on the user's device to locate and connect to the captive
-          portal to improve the user experience. The length of the URL is
-          calculated from the ICMP Extension Object header Length minue the
-          ICMP Extension Object and Captive Portal Object header lengths,
-          which is zero when no URL is provided.</t>
         </list></t>
 
       <t>Editor note / questions. We are trying to get some feedback on A:
@@ -217,10 +206,14 @@
     </section>
 
     <section anchor="security" title="Security Considerations">
-      <t>The obvious security consideration is how to confirm that the
-      received ICMP Message actually came from a Captive Portal, and was not
-      generated from a passive observer on the network (to force the user to
-      connect to a malicious device.).</t>
+      <t>This method simply annotates existing ICMP Destination Unreachable
+      messages to inform users why their connection was blocked. This
+      technique can be used to inform captive portal detection probe software
+      that there is a captive portal present (and potentially to connect to
+      the URL handed out using draft-wkumari-dhc-capport. We anticipate that
+      there will be a new solution devised (such as a well known URL / URI on
+      captive portals) to allow the user / captive portal probe to do
+      sometyhing more useful with this information.</t>
     </section>
 
     <section title="Acknowledgements">
@@ -239,6 +232,8 @@
       <?rfc include='reference.RFC.0792'?>
 
       <?rfc include='reference.RFC.4884'?>
+
+      <?rfc include='reference.RFC.3986'?>
     </references>
 
     <references title="Informative References">
@@ -247,6 +242,17 @@
 
     <section title="Changes / Author Notes.">
       <t>[RFC Editor: Please remove this section before publication ]</t>
+
+      <t>From -00 to 01.</t>
+
+      <t><list style="symbols">
+          <t>Changed the Captive Portal URL to a URI, and specificed that this
+          can ONLY contain a path element, which is appened to
+          http://&lt;gateway_ip&gt;. This is to prevent hijacking connections
+          to other addresses.</t>
+
+          <t>Then removed the entire URL / URI scheme entirely.</t>
+        </list></t>
 
       <t>From -genesis to -00.</t>
 

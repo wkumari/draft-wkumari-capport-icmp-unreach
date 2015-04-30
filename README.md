@@ -11,12 +11,13 @@ Expires: October 31, 2015                                 April 29, 2015
 
 
               Captive Portal ICMP Destination Unreachable
-                 draft-wkumari-capport-icmp-unreach-00
+                 draft-wkumari-capport-icmp-unreach-01
 
 Abstract
 
-   This document defines a multi-part ICMP extension to signal that a
-   user's device is behind a Captive Portal.
+   This document defines a multi-part ICMP extension to ICMP Destination
+   Unreachable messages to signal that a user is behind a Captive
+   Portal.
 
    [ Editor note: The IETF is currently discussing improvements in
    captive portal interactions and user experience improvements.  See:
@@ -50,8 +51,7 @@ Copyright Notice
    Copyright (c) 2015 IETF Trust and the persons identified as the
    document authors.  All rights reserved.
 
-   This document is subject to BCP 78 and the IETF Trust's Legal
-   Provisions Relating to IETF Documents
+
 
 
 
@@ -60,6 +60,8 @@ Bird & Kumari           Expires October 31, 2015                [Page 1]
 Internet-Draft     draft-wkumari-capport-icmp-unreach         April 2015
 
 
+   This document is subject to BCP 78 and the IETF Trust's Legal
+   Provisions Relating to IETF Documents
    (http://trustee.ietf.org/license-info) in effect on the date of
    publication of this document.  Please review these documents
    carefully, as they describe your rights and restrictions with respect
@@ -74,7 +76,7 @@ Table of Contents
      1.1.  Requirements notation . . . . . . . . . . . . . . . . . .   3
    2.  ICMP Dest Unreachable Captive Portal Object . . . . . . . . .   3
    3.  IANA Considerations . . . . . . . . . . . . . . . . . . . . .   4
-   4.  Security Considerations . . . . . . . . . . . . . . . . . . .   5
+   4.  Security Considerations . . . . . . . . . . . . . . . . . . .   4
    5.  Acknowledgements  . . . . . . . . . . . . . . . . . . . . . .   5
    6.  References  . . . . . . . . . . . . . . . . . . . . . . . . .   5
      6.1.  Normative References  . . . . . . . . . . . . . . . . . .   5
@@ -106,8 +108,6 @@ Table of Contents
 
    [ Editor note: This is complementary, but solves a different problem
    to: https://tools.ietf.org/html/draft-wkumari-dhc-capport-12 -
-   wkumari-dhc-capport provides information from a DHCP server (and so
-   doesn't need any changes to deployed CPs, and provides information
 
 
 
@@ -116,6 +116,8 @@ Bird & Kumari           Expires October 31, 2015                [Page 2]
 Internet-Draft     draft-wkumari-capport-icmp-unreach         April 2015
 
 
+   wkumari-dhc-capport provides information from a DHCP server (and so
+   doesn't need any changes to deployed CPs), and provides information
    *before* the client attempts a connection.  It does not, however,
    have a way of noting that an existing connection has been
    interrupted.]
@@ -131,8 +133,7 @@ Internet-Draft     draft-wkumari-capport-icmp-unreach         April 2015
    This document defines an extension object that can be appended to
    selected multi-part ICMP messages ([RFC4884]).  This extension
    permits Captive Portal (CP) NAS devices to inform user devices that
-   their connection has been blocked by the Captive Portal NAS, and,
-   optionally, how to contact the Captive Portal to satisfy it.
+   their connection has been blocked by the Captive Portal NAS.
 
    The Dest Unreachable Captive Portal Object can be appended to the
    ICMP Destination Unreachable messages.  Figure 1 depicts the Dest
@@ -145,10 +146,6 @@ Internet-Draft     draft-wkumari-capport-icmp-unreach         April 2015
        +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
        |W|  Reserved   |         Validity (seconds)                    |
        +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-       |                       Captive Portal URL                      ~
-       ~                           (optional)                          |
-       +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-
 
 
    W  - 1 bit  Warning.  Indicates that the Validity refers to when the
@@ -159,22 +156,6 @@ Internet-Draft     draft-wkumari-capport-icmp-unreach         April 2015
       considered valid (and the OS should not attempt to access the same
       resource in the meantime).
 
-   Captive Portal URL - Variable  The optional URL of the Captive
-      Portal.  This allows Captive Portal detection software running on
-      the user's device to locate and connect to the captive portal to
-      improve the user experience.  The length of the URL is calculated
-      from the ICMP Extension Object header Length minue the ICMP
-
-
-
-Bird & Kumari           Expires October 31, 2015                [Page 3]
-
-Internet-Draft     draft-wkumari-capport-icmp-unreach         April 2015
-
-
-      Extension Object and Captive Portal Object header lengths, which
-      is zero when no URL is provided.
-
    Editor note / questions.  We are trying to get some feedback on A:
    this general idea and B: this implementation.
 
@@ -183,6 +164,14 @@ Internet-Draft     draft-wkumari-capport-icmp-unreach         April 2015
    W bit or C-Type  We have currently specified a single bit (W) to
       indicate that the remaining lease time is running low, and the the
       connection will be interrupted sometime "soon".  We could,
+
+
+
+Bird & Kumari           Expires October 31, 2015                [Page 3]
+
+Internet-Draft     draft-wkumari-capport-icmp-unreach         April 2015
+
+
       instead, use a differnt C-Type.  I think a bit is cleaner (and we
       have reserved 7 bits for future flags), but could be convinced
       (or, better yet, bribed) I'm wrong.  Or that the whole "warning"
@@ -219,7 +208,18 @@ Internet-Draft     draft-wkumari-capport-icmp-unreach         April 2015
    C-Type values are assignable on a first-come-first-serve (FCFS)
    basis.
 
+   [ Editor note: Currently we are not using the C-Type for anything,
+   but I filled this in anyway.  Probably we would overload it at a
+   version identifier type thing, but it could also allow further
+   extension, for example, a pointer to a status page. ]
 
+4.  Security Considerations
+
+   This method simply annotates existing ICMP Destination Unreachable
+   messages to inform users why their connection was blocked.  This
+   technique can be used to inform captive portal detection probe
+   software that there is a captive portal present (and potentially to
+   connect to the URL handed out using draft-wkumari-dhc-capport.  We
 
 
 
@@ -228,17 +228,9 @@ Bird & Kumari           Expires October 31, 2015                [Page 4]
 Internet-Draft     draft-wkumari-capport-icmp-unreach         April 2015
 
 
-   [ Editor note: Currently we are not using the C-Type for anything,
-   but I filled this in anyway.  Probably we would overload it at a
-   version identifier type thing, but it could also allow further
-   extension, for example, a pointer to a status page. ]
-
-4.  Security Considerations
-
-   The obvious security consideration is how to confirm that the
-   received ICMP Message actually came from a Captive Portal, and was
-   not generated from a passive observer on the network (to force the
-   user to connect to a malicious device.).
+   anticipate that there will be a new solution devised (such as a well
+   known URL / URI on captive portals) to allow the user / captive
+   portal probe to do sometyhing more useful with this information.
 
 5.  Acknowledgements
 
@@ -259,6 +251,10 @@ Internet-Draft     draft-wkumari-capport-icmp-unreach         April 2015
    [RFC2119]  Bradner, S., "Key words for use in RFCs to Indicate
               Requirement Levels", BCP 14, RFC 2119, March 1997.
 
+   [RFC3986]  Berners-Lee, T., Fielding, R., and L. Masinter, "Uniform
+              Resource Identifier (URI): Generic Syntax", STD 66, RFC
+              3986, January 2005.
+
    [RFC4884]  Bonica, R., Gan, D., Tappan, D., and C. Pignataro,
               "Extended ICMP to Support Multi-Part Messages", RFC 4884,
               April 2007.
@@ -274,8 +270,12 @@ Appendix A.  Changes / Author Notes.
 
    [RFC Editor: Please remove this section before publication ]
 
-   From -genesis to -00.
+   From -00 to 01.
 
+   o  Changed the Captive Portal URL to a URI, and specificed that this
+      can ONLY contain a path element, which is appened to
+      http://<gateway_ip>.  This is to prevent hijacking connections to
+      other addresses.
 
 
 
@@ -283,6 +283,10 @@ Bird & Kumari           Expires October 31, 2015                [Page 5]
 
 Internet-Draft     draft-wkumari-capport-icmp-unreach         April 2015
 
+
+   o  Then removed the entire URL / URI scheme entirely.
+
+   From -genesis to -00.
 
    o  Initial text.
 
@@ -304,10 +308,6 @@ Authors' Addresses
    US
 
    Email: warren@kumari.net
-
-
-
-
 
 
 
