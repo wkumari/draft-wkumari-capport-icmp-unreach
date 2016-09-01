@@ -188,6 +188,10 @@
       </section>
       <section title="Validity">
 
+        <t>The Validity time, in seconds, that this result should be
+        considered valid (and the OS should not attempt to access the
+        same resource in the meantime).</t>
+
 	<figure>
           <artwork><![CDATA[
 	   0                   1                   2                   3
@@ -198,13 +202,12 @@
 	  ]]></artwork>
 	</figure>
 
-        <t>The Validity time, in seconds, that this result should be
-        considered valid (and the OS should not attempt to access the
-        same resource in the meantime).</t>
-
       </section>
       <section title="Delay">
 	  
+        <t>The Delay time, in seconds, is the time in future when this
+        result should be considered valid.</t>
+
 	<figure>
           <artwork><![CDATA[
 	   0                   1                   2                   3
@@ -215,12 +218,15 @@
 	  ]]></artwork>
 	</figure>
 
-        <t>The Delay time, in seconds, is the time in future when this
-        result should be considered valid.</t>
-
       </section>
       <section title="Policy Class">
 	  
+        <t>The Policy Class is an unsigned integer that provides a
+        "hint" to the captive portal. When a client is specifically
+        responding to a Captive Portal ICMP message and is launching a
+        browser, the Policy Class is given to the portal as a reason
+        for the visitor to visit the portal.</t>
+
 	<figure>
           <artwork><![CDATA[
 	   0                   1                   2                   3
@@ -230,12 +236,6 @@
 	  +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 	  ]]></artwork>
 	</figure>
-
-        <t>The Policy Class is an unsigned integer that provides a
-        "hint" to the captive portal. When a client is specifically
-        responding to a Captive Portal ICMP message and is launching a
-        browser, the Policy Class is given to the portal as a reason
-        for the visitor to visit the portal.</t>
 
 	<t>The Policy Class is used along with the RFC 7710 URI
 	received from DHCP or IPv6 RA to send the user to the captive
@@ -374,7 +374,7 @@
           <t hangText="Version">Set to version 2, per RFC 4884.</t>
           <t hangText="Length-B">Length of extension.</t>
           <t hangText="Class-Num">Set to Captive Portal Class-Num.</t>
-          <t hangText="C-Type">See section 2.1.</t>
+          <t hangText="C-Type">See section 2.6.</t>
 	</list></t>
 	
       </section>
@@ -382,14 +382,14 @@
       
     <section title="IANA Considerations">
       <t>The IANA is requested to assign a Captive Portal ICMP Message
-      Type, as well as Code values defined in section 2.1..</t>
+      Type, as well as Code values defined in section 2.6..</t>
 
       <t>The IANA is also requested to assign a Class-Num identifier
       for the Captive Portal Extension Object from the ICMP Extension
       Object Classes and Class Sub-types registry.</t>
 
       <t>The IANA is also requested to form and administer the corresponding
-      class sub-type (C-Type) space per section 2.1.</t>
+      class sub-type (C-Type) space per section 2.6.</t>
     </section>
 
     <section anchor="security" title="Security Considerations">

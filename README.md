@@ -212,11 +212,11 @@ Internet-Draft     draft-wkumari-capport-icmp-unreach     September 2016
 
 2.3.  Validity
 
-        0                   1                   2                   3
-        0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
-       +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-       |                 Validity (seconds as uint32)                  |
-       +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+   The Validity time, in seconds, that this result should be considered
+   valid (and the OS should not attempt to access the same resource in
+   the meantime).
+
+
 
 
 
@@ -228,11 +228,16 @@ Bird & Kumari             Expires March 5, 2017                 [Page 4]
 Internet-Draft     draft-wkumari-capport-icmp-unreach     September 2016
 
 
-   The Validity time, in seconds, that this result should be considered
-   valid (and the OS should not attempt to access the same resource in
-   the meantime).
+        0                   1                   2                   3
+        0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
+       +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+       |                 Validity (seconds as uint32)                  |
+       +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
 2.4.  Delay
+
+   The Delay time, in seconds, is the time in future when this result
+   should be considered valid.
 
         0                   1                   2                   3
         0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
@@ -240,22 +245,19 @@ Internet-Draft     draft-wkumari-capport-icmp-unreach     September 2016
        |                   Delay (seconds as uint32)                   |
        +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
-   The Delay time, in seconds, is the time in future when this result
-   should be considered valid.
-
 2.5.  Policy Class
-
-        0                   1                   2                   3
-        0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
-       +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-       |                      Policy Class (uint32)                    |
-       +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
    The Policy Class is an unsigned integer that provides a "hint" to the
    captive portal.  When a client is specifically responding to a
    Captive Portal ICMP message and is launching a browser, the Policy
    Class is given to the portal as a reason for the visitor to visit the
    portal.
+
+        0                   1                   2                   3
+        0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
+       +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+       |                      Policy Class (uint32)                    |
+       +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
    The Policy Class is used along with the RFC 7710 URI received from
    DHCP or IPv6 RA to send the user to the captive portal.
@@ -275,14 +277,14 @@ Internet-Draft     draft-wkumari-capport-icmp-unreach     September 2016
 
    1  Packet/flow Error (dropped)
 
-   2  Packet/flow Overflow (dropped)
-
 
 
 Bird & Kumari             Expires March 5, 2017                 [Page 5]
 
 Internet-Draft     draft-wkumari-capport-icmp-unreach     September 2016
 
+
+   2  Packet/flow Overflow (dropped)
 
    3  Packet/flow Warning (not dropped)
 
@@ -330,8 +332,6 @@ Internet-Draft     draft-wkumari-capport-icmp-unreach     September 2016
    The Captive Portal Extension Object can be appended to the ICMP
    Destination Unreachable messages.  Figure 1 depicts the Dest
    Unreachable Captive Portal Object.  It must be preceded by an ICMP
-   Extension Structure Header and an ICMP Object Header.  Both are
-   defined in [RFC4884].
 
 
 
@@ -339,6 +339,9 @@ Bird & Kumari             Expires March 5, 2017                 [Page 6]
 
 Internet-Draft     draft-wkumari-capport-icmp-unreach     September 2016
 
+
+   Extension Structure Header and an ICMP Object Header.  Both are
+   defined in [RFC4884].
 
         0                   1                   2                   3
         0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
@@ -385,9 +388,6 @@ Internet-Draft     draft-wkumari-capport-icmp-unreach     September 2016
 
    Length-A  Length, in 4 byte words, of original datagram.
 
-   Version  Set to version 2, per RFC 4884.
-
-   Length-B  Length of extension.
 
 
 
@@ -396,21 +396,25 @@ Bird & Kumari             Expires March 5, 2017                 [Page 7]
 Internet-Draft     draft-wkumari-capport-icmp-unreach     September 2016
 
 
+   Version  Set to version 2, per RFC 4884.
+
+   Length-B  Length of extension.
+
    Class-Num  Set to Captive Portal Class-Num.
 
-   C-Type  See section 2.1.
+   C-Type  See section 2.6.
 
 3.  IANA Considerations
 
    The IANA is requested to assign a Captive Portal ICMP Message Type,
-   as well as Code values defined in section 2.1..
+   as well as Code values defined in section 2.6..
 
    The IANA is also requested to assign a Class-Num identifier for the
    Captive Portal Extension Object from the ICMP Extension Object
    Classes and Class Sub-types registry.
 
    The IANA is also requested to form and administer the corresponding
-   class sub-type (C-Type) space per section 2.1.
+   class sub-type (C-Type) space per section 2.6.
 
 4.  Security Considerations
 
@@ -437,10 +441,6 @@ Internet-Draft     draft-wkumari-capport-icmp-unreach     September 2016
               RFC 792, DOI 10.17487/RFC0792, September 1981,
               <http://www.rfc-editor.org/info/rfc792>.
 
-   [RFC1122]  Braden, R., Ed., "Requirements for Internet Hosts -
-              Communication Layers", STD 3, RFC 1122, DOI 10.17487/
-              RFC1122, October 1989,
-              <http://www.rfc-editor.org/info/rfc1122>.
 
 
 
@@ -451,6 +451,11 @@ Bird & Kumari             Expires March 5, 2017                 [Page 8]
 
 Internet-Draft     draft-wkumari-capport-icmp-unreach     September 2016
 
+
+   [RFC1122]  Braden, R., Ed., "Requirements for Internet Hosts -
+              Communication Layers", STD 3, RFC 1122, DOI 10.17487/
+              RFC1122, October 1989,
+              <http://www.rfc-editor.org/info/rfc1122>.
 
    [RFC2119]  Bradner, S., "Key words for use in RFCs to Indicate
               Requirement Levels", BCP 14, RFC 2119, DOI 10.17487/
@@ -495,11 +500,6 @@ Appendix A.  Changes / Author Notes.
    From -genesis to -00.
 
    o  Initial text.
-
-
-
-
-
 
 
 
