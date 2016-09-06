@@ -17,7 +17,7 @@ Abstract
 
    This document defines a new ICMP Type for Captive Portal Messages.
    The ICMP Type will only be known to clients supporting this
-   specificaion and provide both generlay or flow 5-tuple specific
+   specificaion and provides both generic and flow 5-tuple specific
    notifications from the Captive Portal NAS.
 
    Further, This document defines a multi-part ICMP extension to ICMP
