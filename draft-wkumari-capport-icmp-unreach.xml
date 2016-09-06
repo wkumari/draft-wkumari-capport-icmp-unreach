@@ -52,7 +52,7 @@
     <abstract>
       <t>This document defines a new ICMP Type for Captive Portal
       Messages. The ICMP Type will only be known to clients supporting
-      this specificaion and provides both generic and flow 5-tuple
+      this specification and provides both generic and flow 5-tuple
       specific notifications from the Captive Portal NAS.</t>
 
       <t>Further, This document defines a multi-part ICMP extension to
@@ -102,14 +102,14 @@
       device that they are behind a captive portal, in addition to the
       underlying ICMP information. Devices able to understand the
       extension get extra information about the captive portal access
-      policy, whereas legacy devices just understnad the underlying
+      policy, whereas legacy devices just understand the underlying
       ICMP message.</t>
 
       <t>The Captive Portal and Destination Unreachable types provide
-      the Capive Portal NAS options in terms of what notifications
+      the Captive Portal NAS options in terms of what notifications
       legacy devices can and should understand.</t>
 
-      <t>The Capitve Portal ICMP Messages only provide
+      <t>The Captive Portal ICMP Messages only provide
       notification. They do not provide any configuration. For that,
       we use <xref target="RFC7710"/> and the Captive Portal
       URI it provides.</t>
@@ -137,7 +137,7 @@
       <t>Captive Portal ICMP messages come in two flavors. Messages
       can be sent using the Captive Portal ICMP Type or they can be
       sent as an ICMP Extension to an existing ICMP Type, such as
-      Destination Unreachable. Data is encoded into the packet slighly
+      Destination Unreachable. Data is encoded into the packet slightly
       differently in each case, however, the field formats remain
       consistent. All fields are in network byte order.</t>
       
@@ -147,9 +147,9 @@
       <section title="Session-ID">
         <t>An unsigned short session identifier that groups ICMP
         messages. ICMP messages containing the same value MUST be
-        assumed to be part of the same access poligy. Any change in
+        assumed to be part of the same access policy. Any change in
         this value between ICMP messages MUST be considered by the
-        client to mean a change in access policy has occured and
+        client to mean a change in access policy has occurred and
         previous notifications are no longer valid.</t>
 
 	<figure>
@@ -267,7 +267,7 @@
         </list></t>
       </section>
       <section title="Message Type">
-	<t>The Captive Portal ICMP Type message is specifcally for
+	<t>The Captive Portal ICMP Type message is specifically for
 	Capport ICMP Compliant devices. It is expected that Legacy
 	devices will ignore such messages.</t>
 
@@ -317,7 +317,7 @@
 	Destination Unreachable, ignoring the extensions.</t>
 
 	<t>When used in an Extension Object, the Captive Portal ICMP
-	data fields are packetd into an extension struction as shown
+	data fields are packed into an extension structure as shown
 	below.</t>
 	
 	<figure>
@@ -398,7 +398,7 @@
           <t hangText="RFC_7710_URI">The URI received from DHCP or
           IPv6 RA per RFC 7710.</t>
 	  <t hangText="SEP">If the RFC_7710_URI contains a '?', then
-	  SEP equals ampersand, otherise a question mark.</t>
+	  SEP equals ampersand, otherwise a question mark.</t>
 	  <t hangText="SESSION_ID">The Session-ID value in integer
 	  format.</t>
 	  <t hangText="POLICY_CLASS">Zero or more Policy Class values
@@ -435,7 +435,7 @@
       the URL handed out using draft-wkumari-dhc-capport. We anticipate that
       there will be a new solution devised (such as a well known URL / URI on
       captive portals) to allow the user / captive portal probe to do
-      sometyhing more useful with this information.</t>
+      something more useful with this information.</t>
     </section>
 
     <section title="Acknowledgements">
@@ -473,7 +473,7 @@
 
       <t><list style="symbols">
           <t>Changed the Captive Portal URL to a URI, and specificed that this
-          can ONLY contain a path element, which is appened to
+          can ONLY contain a path element, which is appended to
           http://&lt;gateway_ip&gt;. This is to prevent hijacking connections
           to other addresses.</t>
 

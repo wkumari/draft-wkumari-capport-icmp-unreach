@@ -17,7 +17,7 @@ Abstract
 
    This document defines a new ICMP Type for Captive Portal Messages.
    The ICMP Type will only be known to clients supporting this
-   specificaion and provides both generic and flow 5-tuple specific
+   specification and provides both generic and flow 5-tuple specific
    notifications from the Captive Portal NAS.
 
    Further, This document defines a multi-part ICMP extension to ICMP
@@ -135,13 +135,13 @@ Internet-Draft     draft-wkumari-capport-icmp-unreach     September 2016
    they are behind a captive portal, in addition to the underlying ICMP
    information.  Devices able to understand the extension get extra
    information about the captive portal access policy, whereas legacy
-   devices just understnad the underlying ICMP message.
+   devices just understand the underlying ICMP message.
 
    The Captive Portal and Destination Unreachable types provide the
-   Capive Portal NAS options in terms of what notifications legacy
+   Captive Portal NAS options in terms of what notifications legacy
    devices can and should understand.
 
-   The Capitve Portal ICMP Messages only provide notification.  They do
+   The Captive Portal ICMP Messages only provide notification.  They do
    not provide any configuration.  For that, we use [RFC7710] and the
    Captive Portal URI it provides.
 
@@ -177,7 +177,7 @@ Internet-Draft     draft-wkumari-capport-icmp-unreach     September 2016
    Captive Portal ICMP messages come in two flavors.  Messages can be
    sent using the Captive Portal ICMP Type or they can be sent as an
    ICMP Extension to an existing ICMP Type, such as Destination
-   Unreachable.  Data is encoded into the packet slighly differently in
+   Unreachable.  Data is encoded into the packet slightly differently in
    each case, however, the field formats remain consistent.  All fields
    are in network byte order.
 
@@ -187,9 +187,9 @@ Internet-Draft     draft-wkumari-capport-icmp-unreach     September 2016
 
    An unsigned short session identifier that groups ICMP messages.  ICMP
    messages containing the same value MUST be assumed to be part of the
-   same access poligy.  Any change in this value between ICMP messages
+   same access policy.  Any change in this value between ICMP messages
    MUST be considered by the client to mean a change in access policy
-   has occured and previous notifications are no longer valid.
+   has occurred and previous notifications are no longer valid.
 
           0                   1
           0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5
@@ -304,7 +304,7 @@ Internet-Draft     draft-wkumari-capport-icmp-unreach     September 2016
 
 2.7.  Message Type
 
-   The Captive Portal ICMP Type message is specifcally for Capport ICMP
+   The Captive Portal ICMP Type message is specifically for Capport ICMP
    Compliant devices.  It is expected that Legacy devices will ignore
    such messages.
 
@@ -356,7 +356,7 @@ Internet-Draft     draft-wkumari-capport-icmp-unreach     September 2016
    ignoring the extensions.
 
    When used in an Extension Object, the Captive Portal ICMP data fields
-   are packetd into an extension struction as shown below.
+   are packed into an extension structure as shown below.
 
         0                   1                   2                   3
         0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
@@ -455,7 +455,7 @@ Internet-Draft     draft-wkumari-capport-icmp-unreach     September 2016
    RFC_7710_URI  The URI received from DHCP or IPv6 RA per RFC 7710.
 
    SEP  If the RFC_7710_URI contains a '?', then SEP equals ampersand,
-      otherise a question mark.
+      otherwise a question mark.
 
    SESSION_ID  The Session-ID value in integer format.
 
@@ -488,7 +488,7 @@ Internet-Draft     draft-wkumari-capport-icmp-unreach     September 2016
    connect to the URL handed out using draft-wkumari-dhc-capport.  We
    anticipate that there will be a new solution devised (such as a well
    known URL / URI on captive portals) to allow the user / captive
-   portal probe to do sometyhing more useful with this information.
+   portal probe to do something more useful with this information.
 
 6.  Acknowledgements
 
@@ -567,7 +567,7 @@ Internet-Draft     draft-wkumari-capport-icmp-unreach     September 2016
    From -00 to 01.
 
    o  Changed the Captive Portal URL to a URI, and specificed that this
-      can ONLY contain a path element, which is appened to
+      can ONLY contain a path element, which is appended to
       http://<gateway_ip>.  This is to prevent hijacking connections to
       other addresses.
 
