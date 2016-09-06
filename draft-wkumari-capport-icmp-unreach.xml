@@ -148,9 +148,10 @@
         <t>An unsigned short session identifier that groups ICMP
         messages. ICMP messages containing the same value MUST be
         assumed to be part of the same access policy. Any change in
-        this value between ICMP messages MUST be considered by the
-        client to mean a change in access policy has occurred and
-        previous notifications are no longer valid.</t>
+        this value between ICMP messages from the same source IP
+        address MUST be considered by the client to mean a change in
+        access policy has occurred and previous notifications are no
+        longer valid.</t>
 
 	<figure>
           <artwork><![CDATA[

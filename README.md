@@ -188,8 +188,9 @@ Internet-Draft     draft-wkumari-capport-icmp-unreach     September 2016
    An unsigned short session identifier that groups ICMP messages.  ICMP
    messages containing the same value MUST be assumed to be part of the
    same access policy.  Any change in this value between ICMP messages
-   MUST be considered by the client to mean a change in access policy
-   has occurred and previous notifications are no longer valid.
+   from the same source IP address MUST be considered by the client to
+   mean a change in access policy has occurred and previous
+   notifications are no longer valid.
 
           0                   1
           0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5
@@ -218,7 +219,6 @@ Internet-Draft     draft-wkumari-capport-icmp-unreach     September 2016
 
    Optional fields included in flags appear in the ICMP payload in the
    same order as the respective bits.
-
 
 
 
