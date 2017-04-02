@@ -44,7 +44,7 @@
       </address>
     </author>
 
-    <date day="1" month="September" year="2016"/>
+    <date day="2" month="April" year="2017"/>
 
     <area>template</area>
     <workgroup>template</workgroup>
@@ -67,7 +67,7 @@
 
       <t>[RFC Editor: Please remove this before publication. This document is
       being stored in github at
-      https://github.com/wkumari/draft-wkumari-capport-icmp-unreach . Authors
+      https://github.com/wlanmac/draft-wkumari-capport-icmp-unreach . Authors
       gratefully accept pull requests, and keep the latest (edit buffer)
       versions there, so commenters can follow along at home.]</t>
     </abstract>

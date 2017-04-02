@@ -7,11 +7,11 @@
 template                                                         D. Bird
 Internet-Draft                                                 W. Kumari
 Intended status: Informational                                    Google
-Expires: March 5, 2017                                 September 1, 2016
+Expires: October 4, 2017                                   April 2, 2017
 
 
                       Captive Portal ICMP Messages
-                 draft-wkumari-capport-icmp-unreach-01
+                 draft-wkumari-capport-icmp-unreach-02
 
 Abstract
 
@@ -31,7 +31,7 @@ Abstract
    https://www.ietf.org/mailman/listinfo/captive-portals ]
 
    [RFC Editor: Please remove this before publication.  This document is
-   being stored in github at https://github.com/wkumari/draft-wkumari-
+   being stored in github at https://github.com/wlanmac/draft-wkumari-
    capport-icmp-unreach . Authors gratefully accept pull requests, and
    keep the latest (edit buffer) versions there, so commenters can
    follow along at home.]
@@ -51,18 +51,18 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on March 5, 2017.
+   This Internet-Draft will expire on October 4, 2017.
 
 
 
-Bird & Kumari             Expires March 5, 2017                 [Page 1]
+Bird & Kumari            Expires October 4, 2017                [Page 1]
 
-Internet-Draft     draft-wkumari-capport-icmp-unreach     September 2016
+Internet-Draft     draft-wkumari-capport-icmp-unreach         April 2017
 
 
 Copyright Notice
 
-   Copyright (c) 2016 IETF Trust and the persons identified as the
+   Copyright (c) 2017 IETF Trust and the persons identified as the
    document authors.  All rights reserved.
 
    This document is subject to BCP 78 and the IETF Trust's Legal
@@ -111,9 +111,9 @@ Table of Contents
 
 
 
-Bird & Kumari             Expires March 5, 2017                 [Page 2]
+Bird & Kumari            Expires October 4, 2017                [Page 2]
 
-Internet-Draft     draft-wkumari-capport-icmp-unreach     September 2016
+Internet-Draft     draft-wkumari-capport-icmp-unreach         April 2017
 
 
    inaccurate, error condition (like a TCP reset, for TCP connections,
@@ -167,9 +167,9 @@ Internet-Draft     draft-wkumari-capport-icmp-unreach     September 2016
 
 
 
-Bird & Kumari             Expires March 5, 2017                 [Page 3]
+Bird & Kumari            Expires October 4, 2017                [Page 3]
 
-Internet-Draft     draft-wkumari-capport-icmp-unreach     September 2016
+Internet-Draft     draft-wkumari-capport-icmp-unreach         April 2017
 
 
 2.  Captive Portal ICMP
@@ -223,9 +223,9 @@ Internet-Draft     draft-wkumari-capport-icmp-unreach     September 2016
 
 
 
-Bird & Kumari             Expires March 5, 2017                 [Page 4]
+Bird & Kumari            Expires October 4, 2017                [Page 4]
 
-Internet-Draft     draft-wkumari-capport-icmp-unreach     September 2016
+Internet-Draft     draft-wkumari-capport-icmp-unreach         April 2017
 
 
         0                   1                   2                   3
@@ -279,9 +279,9 @@ Internet-Draft     draft-wkumari-capport-icmp-unreach     September 2016
 
 
 
-Bird & Kumari             Expires March 5, 2017                 [Page 5]
+Bird & Kumari            Expires October 4, 2017                [Page 5]
 
-Internet-Draft     draft-wkumari-capport-icmp-unreach     September 2016
+Internet-Draft     draft-wkumari-capport-icmp-unreach         April 2017
 
 
         0                   1                   2                   3
@@ -335,9 +335,9 @@ Internet-Draft     draft-wkumari-capport-icmp-unreach     September 2016
 
 
 
-Bird & Kumari             Expires March 5, 2017                 [Page 6]
+Bird & Kumari            Expires October 4, 2017                [Page 6]
 
-Internet-Draft     draft-wkumari-capport-icmp-unreach     September 2016
+Internet-Draft     draft-wkumari-capport-icmp-unreach         April 2017
 
 
    Length  Number of 4 byte words of original datagram.
@@ -391,9 +391,9 @@ Internet-Draft     draft-wkumari-capport-icmp-unreach     September 2016
 
 
 
-Bird & Kumari             Expires March 5, 2017                 [Page 7]
+Bird & Kumari            Expires October 4, 2017                [Page 7]
 
-Internet-Draft     draft-wkumari-capport-icmp-unreach     September 2016
+Internet-Draft     draft-wkumari-capport-icmp-unreach         April 2017
 
 
         0                   1                   2                   3
@@ -447,9 +447,9 @@ Internet-Draft     draft-wkumari-capport-icmp-unreach     September 2016
 
 
 
-Bird & Kumari             Expires March 5, 2017                 [Page 8]
+Bird & Kumari            Expires October 4, 2017                [Page 8]
 
-Internet-Draft     draft-wkumari-capport-icmp-unreach     September 2016
+Internet-Draft     draft-wkumari-capport-icmp-unreach         April 2017
 
 
    RFC_7710_URI  The URI received from DHCP or IPv6 RA per RFC 7710.
@@ -503,9 +503,9 @@ Internet-Draft     draft-wkumari-capport-icmp-unreach     September 2016
 
 
 
-Bird & Kumari             Expires March 5, 2017                 [Page 9]
+Bird & Kumari            Expires October 4, 2017                [Page 9]
 
-Internet-Draft     draft-wkumari-capport-icmp-unreach     September 2016
+Internet-Draft     draft-wkumari-capport-icmp-unreach         April 2017
 
 
 7.  References
@@ -559,9 +559,9 @@ Appendix A.  Changes / Author Notes.
 
 
 
-Bird & Kumari             Expires March 5, 2017                [Page 10]
+Bird & Kumari            Expires October 4, 2017               [Page 10]
 
-Internet-Draft     draft-wkumari-capport-icmp-unreach     September 2016
+Internet-Draft     draft-wkumari-capport-icmp-unreach         April 2017
 
 
    From -00 to 01.
@@ -615,5 +615,5 @@ Authors' Addresses
 
 
 
-Bird & Kumari             Expires March 5, 2017                [Page 11]
+Bird & Kumari            Expires October 4, 2017               [Page 11]
 ```
