@@ -15,8 +15,9 @@
   <front>
     <!-- WK: Set long title. -->
 
-    <title abbrev="draft-wkumari-capport-icmp-unreach">Captive Portal
-    ICMP Messages</title>
+    <title abbrev="draft-wkumari-capport-icmp-unreach">
+      Captive Portal ICMP Messages
+    </title>
 
     <author fullname="David Bird" initials="D." surname="Bird">
       <organization>Google</organization>
@@ -44,7 +45,7 @@
       </address>
     </author>
 
-    <date day="2" month="April" year="2017"/>
+    <date day="12" month="May" year="2017"/>
 
     <area>template</area>
     <workgroup>template</workgroup>
@@ -52,8 +53,8 @@
     <abstract>
       <t>This document defines a new ICMP Type for Captive Portal
       Messages. The ICMP Type will only be known to clients supporting
-      this specification and provides both generic and flow 5-tuple
-      specific notifications from the Captive Portal NAS.</t>
+      this specification and provides flow 5-tuple specific
+      notifications from the Captive Portal NAS.</t>
 
       <t>Further, This document defines a multi-part ICMP extension to
       ICMP Destination Unreachable messages to signal, not only that
@@ -94,7 +95,7 @@
 
       <t>This document defines a new ICMP Type for Captive Portal. The
       Captive Portal ICMP Type can be used to send flow 5-tuple
-      specific or general notifications to user devices. As a new ICMP
+      specific notifications to user devices. As a new ICMP
       type, it is expected to be ignored by legacy devices.</t>
 
       <t>This document also defines an Extension Object that can be
@@ -261,10 +262,11 @@
       <section title="Message Code/C-Type">
         <t>Captive Portal Message Code and C-Types:
 	<list style="hanging">
-          <t hangText="0">General Change of Authorization (change in policy)</t>
-          <t hangText="1">Packet/flow Error (dropped)</t>
-          <t hangText="2">Packet/flow Overflow (dropped)</t>
-          <t hangText="3">Packet/flow Warning (not dropped)</t>
+          <t hangText="1">Capport Required (packet dropped)</t>
+          <t hangText="2">Capport Suggested - QoS Overflow (packet
+          dropped)</t>
+          <t hangText="3">Capport Suggested - Warning (packet not
+          dropped)</t>
         </list></t>
       </section>
       <section title="Message Type">
@@ -297,7 +299,7 @@
 
 	<t>As shown in the figure above, the Captive Portal Flags and
 	Session-ID and part of the ICMP header. The optional fields
-	are in the ICMP payload, past the (optional) original datagram
+	are in the ICMP payload, past the required original datagram
 	headers of a length defined by Length.</t>
 
 	<t><list style="hanging">
@@ -307,7 +309,7 @@
       <section title="Extension Object">
 	<t>This document defines an extension object that can be
 	appended to selected multi-part ICMP messages (<xref
-	target="RFC4884"/>). This extension permits the CP-NAS to
+	target="RFC4884"/>). This extension permits the Capport NAS to
 	inform Capport ICMP Compliant devices that their connection
 	has been blocked due to an Access Policy requiring interaction
 	with the Captive Portal.</t>
@@ -441,7 +443,7 @@
 
     <section title="Acknowledgements">
       <t>The authors wish to thank the authors of RFC4950 (especially Ron
-      Bonica ) - I stole much of his text when writing the extension
+      Bonica) - I stole much of his text when writing the extension
       definition.</t>
     </section>
   </middle>

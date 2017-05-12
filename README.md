@@ -7,7 +7,7 @@
 template                                                         D. Bird
 Internet-Draft                                                 W. Kumari
 Intended status: Informational                                    Google
-Expires: October 4, 2017                                   April 2, 2017
+Expires: November 13, 2017                                  May 12, 2017
 
 
                       Captive Portal ICMP Messages
@@ -17,8 +17,8 @@ Abstract
 
    This document defines a new ICMP Type for Captive Portal Messages.
    The ICMP Type will only be known to clients supporting this
-   specification and provides both generic and flow 5-tuple specific
-   notifications from the Captive Portal NAS.
+   specification and provides flow 5-tuple specific notifications from
+   the Captive Portal NAS.
 
    Further, This document defines a multi-part ICMP extension to ICMP
    Destination Unreachable messages to signal, not only that the packet
@@ -51,13 +51,13 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on October 4, 2017.
+   This Internet-Draft will expire on November 13, 2017.
 
 
 
-Bird & Kumari            Expires October 4, 2017                [Page 1]
+Bird & Kumari           Expires November 13, 2017               [Page 1]
 
-Internet-Draft     draft-wkumari-capport-icmp-unreach         April 2017
+Internet-Draft     draft-wkumari-capport-icmp-unreach           May 2017
 
 
 Copyright Notice
@@ -111,9 +111,9 @@ Table of Contents
 
 
 
-Bird & Kumari            Expires October 4, 2017                [Page 2]
+Bird & Kumari           Expires November 13, 2017               [Page 2]
 
-Internet-Draft     draft-wkumari-capport-icmp-unreach         April 2017
+Internet-Draft     draft-wkumari-capport-icmp-unreach           May 2017
 
 
    inaccurate, error condition (like a TCP reset, for TCP connections,
@@ -126,9 +126,9 @@ Internet-Draft     draft-wkumari-capport-icmp-unreach         April 2017
    captive portal is in use.
 
    This document defines a new ICMP Type for Captive Portal.  The
-   Captive Portal ICMP Type can be used to send flow 5-tuple specific or
-   general notifications to user devices.  As a new ICMP type, it is
-   expected to be ignored by legacy devices.
+   Captive Portal ICMP Type can be used to send flow 5-tuple specific
+   notifications to user devices.  As a new ICMP type, it is expected to
+   be ignored by legacy devices.
 
    This document also defines an Extension Object that can be appended
    to selected multi-part ICMP messages to inform the user device that
@@ -167,9 +167,9 @@ Internet-Draft     draft-wkumari-capport-icmp-unreach         April 2017
 
 
 
-Bird & Kumari            Expires October 4, 2017                [Page 3]
+Bird & Kumari           Expires November 13, 2017               [Page 3]
 
-Internet-Draft     draft-wkumari-capport-icmp-unreach         April 2017
+Internet-Draft     draft-wkumari-capport-icmp-unreach           May 2017
 
 
 2.  Captive Portal ICMP
@@ -223,9 +223,9 @@ Internet-Draft     draft-wkumari-capport-icmp-unreach         April 2017
 
 
 
-Bird & Kumari            Expires October 4, 2017                [Page 4]
+Bird & Kumari           Expires November 13, 2017               [Page 4]
 
-Internet-Draft     draft-wkumari-capport-icmp-unreach         April 2017
+Internet-Draft     draft-wkumari-capport-icmp-unreach           May 2017
 
 
         0                   1                   2                   3
@@ -279,9 +279,9 @@ Internet-Draft     draft-wkumari-capport-icmp-unreach         April 2017
 
 
 
-Bird & Kumari            Expires October 4, 2017                [Page 5]
+Bird & Kumari           Expires November 13, 2017               [Page 5]
 
-Internet-Draft     draft-wkumari-capport-icmp-unreach         April 2017
+Internet-Draft     draft-wkumari-capport-icmp-unreach           May 2017
 
 
         0                   1                   2                   3
@@ -294,13 +294,11 @@ Internet-Draft     draft-wkumari-capport-icmp-unreach         April 2017
 
    Captive Portal Message Code and C-Types:
 
-   0  General Change of Authorization (change in policy)
+   1  Capport Required (packet dropped)
 
-   1  Packet/flow Error (dropped)
+   2  Capport Suggested - QoS Overflow (packet dropped)
 
-   2  Packet/flow Overflow (dropped)
-
-   3  Packet/flow Warning (not dropped)
+   3  Capport Suggested - Warning (packet not dropped)
 
 2.7.  Message Type
 
@@ -329,24 +327,24 @@ Internet-Draft     draft-wkumari-capport-icmp-unreach         April 2017
 
    As shown in the figure above, the Captive Portal Flags and Session-ID
    and part of the ICMP header.  The optional fields are in the ICMP
-   payload, past the (optional) original datagram headers of a length
+   payload, past the required original datagram headers of a length
    defined by Length.
 
-
-
-
-Bird & Kumari            Expires October 4, 2017                [Page 6]
-
-Internet-Draft     draft-wkumari-capport-icmp-unreach         April 2017
-
-
    Length  Number of 4 byte words of original datagram.
+
+
+
+
+Bird & Kumari           Expires November 13, 2017               [Page 6]
+
+Internet-Draft     draft-wkumari-capport-icmp-unreach           May 2017
+
 
 2.8.  Extension Object
 
    This document defines an extension object that can be appended to
    selected multi-part ICMP messages ([RFC4884]).  This extension
-   permits the CP-NAS to inform Capport ICMP Compliant devices that
+   permits the Capport NAS to inform Capport ICMP Compliant devices that
    their connection has been blocked due to an Access Policy requiring
    interaction with the Captive Portal.
 
@@ -391,9 +389,11 @@ Internet-Draft     draft-wkumari-capport-icmp-unreach         April 2017
 
 
 
-Bird & Kumari            Expires October 4, 2017                [Page 7]
+
+
+Bird & Kumari           Expires November 13, 2017               [Page 7]
 
-Internet-Draft     draft-wkumari-capport-icmp-unreach         April 2017
+Internet-Draft     draft-wkumari-capport-icmp-unreach           May 2017
 
 
         0                   1                   2                   3
@@ -447,9 +447,9 @@ Internet-Draft     draft-wkumari-capport-icmp-unreach         April 2017
 
 
 
-Bird & Kumari            Expires October 4, 2017                [Page 8]
+Bird & Kumari           Expires November 13, 2017               [Page 8]
 
-Internet-Draft     draft-wkumari-capport-icmp-unreach         April 2017
+Internet-Draft     draft-wkumari-capport-icmp-unreach           May 2017
 
 
    RFC_7710_URI  The URI received from DHCP or IPv6 RA per RFC 7710.
@@ -503,9 +503,9 @@ Internet-Draft     draft-wkumari-capport-icmp-unreach         April 2017
 
 
 
-Bird & Kumari            Expires October 4, 2017                [Page 9]
+Bird & Kumari           Expires November 13, 2017               [Page 9]
 
-Internet-Draft     draft-wkumari-capport-icmp-unreach         April 2017
+Internet-Draft     draft-wkumari-capport-icmp-unreach           May 2017
 
 
 7.  References
@@ -559,9 +559,9 @@ Appendix A.  Changes / Author Notes.
 
 
 
-Bird & Kumari            Expires October 4, 2017               [Page 10]
+Bird & Kumari           Expires November 13, 2017              [Page 10]
 
-Internet-Draft     draft-wkumari-capport-icmp-unreach         April 2017
+Internet-Draft     draft-wkumari-capport-icmp-unreach           May 2017
 
 
    From -00 to 01.
@@ -615,5 +615,5 @@ Authors' Addresses
 
 
 
-Bird & Kumari            Expires October 4, 2017               [Page 11]
+Bird & Kumari           Expires November 13, 2017              [Page 11]
 ```
