@@ -76,27 +76,30 @@
 
   <middle>
     <section title="Introduction">
-      <t>Captive Portals work by blocking (or redirecting)
+      <t>Captive Portals work by blocking some and redirecting other
       communications outside of a "walled garden" until the user has
       either authenticated, acknowledged an Acceptable Use Policy
       (AUP), or otherwise satisfied the requirements of the Captive
-      Portal. Depending on the captive portal implementation,
-      connections other than HTTP will either timeout (silently
-      packets dropped) or meet with a different, inaccurate, error
-      condition (like a TCP reset, for TCP connections, or ICMP
-      Destination Unreachable with existing codes).</t>
+      Portal.</t>
 
-      <t>A current option for captive portal networks is to reject
-      traffic not in the walled garden by returning the Destination
-      Unreachable either Host or Network Administratively
+      <t>Today, notification of captivivity is implemented by
+      intercepting HTTP port 80 requests in order for the Captive
+      Portal NAS to respond with an HTTP redirect. Depending on the
+      captive portal implementation, connections other than HTTP will
+      either timeout (silently packets dropped) or meet with a
+      different, inaccurate, error condition, for instance a TCP
+      reset, for TCP connections, or ICMP Destination Unreachable
+      using existing codes. A typical implemenation might reject
+      traffic not in the walled garden by returning an ICMP
+      Destination Unreachable either Host or Network Administratively
       Prohibited. However, these codes are typically permanent
       policies and do not specifically indicate a captive portal is in
       use.</t>
 
       <t>This document defines a new ICMP Type for Captive Portal. The
       Captive Portal ICMP Type can be used to send flow 5-tuple
-      specific notifications to user devices. As a new ICMP
-      type, it is expected to be ignored by legacy devices.</t>
+      specific notifications to user devices. As a new ICMP type, it
+      is expected to be ignored by legacy devices.</t>
 
       <t>This document also defines an Extension Object that can be
       appended to selected multi-part ICMP messages to inform the user
@@ -112,8 +115,8 @@
 
       <t>The Captive Portal ICMP Messages only provide
       notification. They do not provide any configuration. For that,
-      we use <xref target="RFC7710"/> and the Captive Portal
-      URI it provides.</t>
+      we use <xref target="RFC7710"/> and the Captive Portal URI it
+      provides.</t>
 
       <section title="Requirements notation">
         <t>The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
@@ -126,10 +129,12 @@
 	<t><list style="hanging">
           <t hangText="Capport ICMP device">Device or operating system
           compliant to this specification.</t>
-          <t hangText="CP-NAS">Network Access Server implementing
-          Captive Portal enforcement.</t>
           <t hangText="Legacy device">Device or operating system not
           compliant to this specification.</t>
+          <t hangText="Captive Portal NAS">Network Access Server
+          implementing Captive Portal enforcement.</t>
+          <t hangText="Capport NAS">A Captive Portal NAS supporting
+          Capport standards.</t>
 	</list></t>
       </section>
     </section>
@@ -170,7 +175,7 @@
 	flags for optional payload data fields. All data fields are
 	unsigned 32bit integers.</t>
 	
-	<t>Bit flags and their (optional) respective data fields:</t>
+	<t>Bit flags and their respective data fields:</t>
 	
 	<figure>
           <artwork><![CDATA[
@@ -206,36 +211,43 @@
 
       </section>
       <section title="Validity">
-        <t>The Validity time, in seconds, that this result should be
-        considered valid and the OS SHOULD not attempt to access the
-        same resource in the meantime. During the Validity time, the
-        NAS MAY chose to silently drop the packets of the same flow
-        5-tuple to selectively cause legacy clients to time-out
-        connections.</t>
+        <t>The Validity time, in milliseconds, that this result should
+        be considered valid and the receiver MAY NOT want to attempt
+        to access the same resource in the meantime. During the
+        Validity time, the Capport NAS MAY choose to silently drop the
+        packets of the same flow 5-tuple to selectively cause legacy
+        clients to time-out connections.</t>
 
 	<figure>
           <artwork><![CDATA[
 	   0                   1                   2                   3
 	   0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
 	  +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-	  |                 Validity (seconds as uint32)                  |
+	  |              Validity (milliseconds as uint32)                |
 	  +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 	  ]]></artwork>
 	</figure>
 
+	<t>This value is designed to provide the reciever additional
+	information. It is up to the receiver to "trust, but verify"
+	and the receiver may choose to not change any behavior based
+	on this information. However, the receiver is warned of
+	possibly different behavor of the Capport NAS (e.g. silenty
+	dropping similar packets) during the Validity period.</t>
+
       </section>
       <section title="Delay">
-        <t>The Delay time, in seconds, is the time in future when this
-        result should be considered valid. This is used to give
-        advanced notice that a change in access policy is about to
-        happen.</t>
+        <t>The Delay time, in milliseconds, is the time in future when
+        this result should be considered valid. This is used to give
+        the receiver advanced notice that a change in access policy is
+        about to happen.</t>
 
 	<figure>
           <artwork><![CDATA[
 	   0                   1                   2                   3
 	   0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
 	  +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-	  |                   Delay (seconds as uint32)                   |
+	  |                Delay (milliseconds as uint32)                 |
 	  +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 	  ]]></artwork>
 	</figure>
@@ -246,7 +258,7 @@
         "hint" to the captive portal. When a client is specifically
         responding to a Captive Portal ICMP message and is launching a
         browser, the Policy Class is given to the portal as a reason
-        for the visitor to visit the portal.</t>
+        for the visitor being redirected to the the captive portal.</t>
 
 	<figure>
           <artwork><![CDATA[
@@ -418,6 +430,14 @@
       </figure>
       
     </section>
+    <section title="Example Client / NAS Interactions">
+      <t>
+	<figure>
+          <artwork><![CDATA[
+	]]></artwork>
+	</figure>
+      </t>
+    </section>
     <section title="IANA Considerations">
       <t>The IANA is requested to assign a Captive Portal ICMP Message
       Type, as well as Code values defined in section 2.6..</t>
@@ -431,20 +451,30 @@
     </section>
 
     <section anchor="security" title="Security Considerations">
-      <t>This method simply annotates existing ICMP Destination Unreachable
-      messages to inform users why their connection was blocked. This
-      technique can be used to inform captive portal detection probe software
-      that there is a captive portal present (and potentially to connect to
-      the URL handed out using draft-wkumari-dhc-capport. We anticipate that
-      there will be a new solution devised (such as a well known URL / URI on
-      captive portals) to allow the user / captive portal probe to do
-      something more useful with this information.</t>
+      <t>The newly defined ICMP extension mearly annotates existing
+      ICMP Destination Unreachable messages to inform users why their
+      connection was blocked. This technique can be used to inform
+      captive portal detection probe software that a captive portal,
+      specifically, is the reason traffic is blocked. Together with
+      RFC 7710 providing configuration in the form of Captive Portal
+      URL, Capport ICMP provides an improvement over the current
+      man-in-the-middle approach to notification and enforcement of
+      captive portals.</t>
+      <t>The newly defined ICMP Type for Capport is a non-terminal
+      message from the network that poses no additional threat over
+      existing ICMP connection terminating messages. While Capport
+      ICMP may present a new kind of annoyance for the user, this can
+      be mitigated by intelligent capport detection software.
+      Moreover, the other option the NAS has is to terminate
+      connections and enforce the captive portal, which is arguably
+      more annoying.</t>
     </section>
 
     <section title="Acknowledgements">
-      <t>The authors wish to thank the authors of RFC4950 (especially Ron
-      Bonica) - I stole much of his text when writing the extension
-      definition.</t>
+      <t>The authors wish to thank the members of the capport mailing
+      list, Dave Dolson, Vincent van Dam, Martin Thomson, Erik Kline,
+      Kyle Larose, and the authors of RFC4950 (especially Ron
+      Bonica).</t>
     </section>
   </middle>
 
