@@ -18,7 +18,7 @@
     <title abbrev="draft-wkumari-capport-icmp-unreach">
       Captive Portal ICMP Messages
     </title>
-
+    
     <author fullname="David Bird" initials="D." surname="Bird">
       <organization>Google</organization>
       <address>
@@ -31,7 +31,7 @@
         <email>dbird@google.com</email>
       </address>
     </author>
-
+    
     <author fullname="Warren Kumari" initials="W." surname="Kumari">
       <organization>Google</organization>
       <address>
@@ -172,8 +172,8 @@
       </section>
       <section title="Flags">
 	<t>In Captive Portal ICMP Messages, a flags field contains bit
-	flags for optional payload data fields. All data fields are
-	unsigned 32bit integers.</t>
+	flags for optional payload data fields. The Flags field
+	provides future extensibility.</t>
 	
 	<t>Bit flags and their respective data fields:</t>
 	
@@ -181,95 +181,10 @@
           <artwork><![CDATA[
 	   0 1 2 3 4 5 6 7 
 	  +-+-+-+-+-+-+-+-+
-	  |V|D|P|   zero  |
+	  |    Reserved   |
 	  +-+-+-+-+-+-+-+-+
 	  ]]></artwork>
 	</figure>
-
-	<t><list style="hanging">
-          <t hangText="V - 1 bit">Validity</t>
-          <t hangText="D - 1 bit">Delay</t>
-          <t hangText="P - 1 bit">Policy Class</t>
-	</list></t>
-	
-	<t>Optional fields included in flags appear in the ICMP
-	payload in the same order as the respective bits.</t>
-
-	<figure>
-          <artwork><![CDATA[
-	   0                   1                   2                   3
-	   0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
-	  +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-	  |                        Validity (optional)                    |
-	  +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-	  |                         Delay (optional)                      |
-	  +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-	  |                     Policy-Class (optional)                   |
-	  +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-	  ]]></artwork>
-	</figure>
-
-      </section>
-      <section title="Validity">
-        <t>The Validity time, in milliseconds, that this result should
-        be considered valid and the receiver MAY NOT want to attempt
-        to access the same resource in the meantime. During the
-        Validity time, the Capport NAS MAY choose to silently drop the
-        packets of the same flow 5-tuple to selectively cause legacy
-        clients to time-out connections.</t>
-
-	<figure>
-          <artwork><![CDATA[
-	   0                   1                   2                   3
-	   0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
-	  +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-	  |              Validity (milliseconds as uint32)                |
-	  +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-	  ]]></artwork>
-	</figure>
-
-	<t>This value is designed to provide the reciever additional
-	information. It is up to the receiver to "trust, but verify"
-	and the receiver may choose to not change any behavior based
-	on this information. However, the receiver is warned of
-	possibly different behavor of the Capport NAS (e.g. silenty
-	dropping similar packets) during the Validity period.</t>
-
-      </section>
-      <section title="Delay">
-        <t>The Delay time, in milliseconds, is the time in future when
-        this result should be considered valid. This is used to give
-        the receiver advanced notice that a change in access policy is
-        about to happen.</t>
-
-	<figure>
-          <artwork><![CDATA[
-	   0                   1                   2                   3
-	   0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
-	  +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-	  |                Delay (milliseconds as uint32)                 |
-	  +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-	  ]]></artwork>
-	</figure>
-
-      </section>
-      <section title="Policy Class">
-        <t>The Policy Class is an unsigned integer that provides a
-        "hint" to the captive portal. When a client is specifically
-        responding to a Captive Portal ICMP message and is launching a
-        browser, the Policy Class is given to the portal as a reason
-        for the visitor being redirected to the the captive portal.</t>
-
-	<figure>
-          <artwork><![CDATA[
-	   0                   1                   2                   3
-	   0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
-	  +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-	  |                      Policy Class (uint32)                    |
-	  +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-	  ]]></artwork>
-	</figure>
-
       </section>
       <section title="Message Code/C-Type">
         <t>Captive Portal Message Code and C-Types:
@@ -293,18 +208,14 @@
 	  +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 	  |      Type     |      Code     |          Checksum             |
 	  +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-	  |V|D|P|  zero   |     Length    |          Session-ID           |
+	  |      Flags    |     Length    |          Session-ID           |
 	  +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 	  |      Internet Header + leading octets of original datagram    |
 	  |                                                               |
 	  |                           //                                  |
 	  |                                                               |
 	  +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-	  |                        Validity (optional)                    |
-	  +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-	  |                         Delay (optional)                      |
-	  +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-	  |                     Policy-Class (optional)                   |
+	  ~             Optional Extensions defined by Flags              ~
 	  +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 	  ]]></artwork>
 	</figure>
@@ -340,13 +251,9 @@
 	   0                   1                   2                   3
 	   0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
 	  +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-	  |V|D|P|       Reserved          |         Session-ID            |
+	  |     Flags    |    Reserved    |         Session-ID            |
 	  +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-	  |                        Validity (optional)                    |
-	  +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-	  |                         Delay (optional)                      |
-	  +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-	  |                     Policy-Class (optional)                   |
+	  ~             Optional Extensions defined by Flags              ~
 	  +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 	  ]]></artwork>
 	</figure>
@@ -370,17 +277,13 @@
 	  |                           //                                  |
 	  |                                                               |
 	  +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-	  |Version|      (Reserved)       |           Checksum            |
+	  |Version|       Reserved        |           Checksum            |
 	  +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 	  |             Length-B          |   Class-Num   |   C-Type      |
 	  +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-	  |V|D|P|       Reserved          |         Session-ID            |
+	  |     Flags    |    Reserved    |         Session-ID            |
 	  +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-	  |                        Validity (optional)                    |
-	  +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-	  |                         Delay (optional)                      |
-	  +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-	  |                     Policy-Class (optional)                   |
+	  ~             Optional Extensions defined by Flags              ~
 	  +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 	  ]]></artwork>
 	</figure>
@@ -392,51 +295,12 @@
           <t hangText="Version">Set to version 2, per RFC 4884.</t>
           <t hangText="Length-B">Length of extension.</t>
           <t hangText="Class-Num">Set to Captive Portal Class-Num.</t>
-          <t hangText="C-Type">See section 2.6.</t>
+          <t hangText="C-Type">See section 2.4.</t>
+          <t hangText="Flags">Extension for future use.</t>
+          <t hangText="Session-ID">See section 2.1.</t>
 	</list></t>
 	
       </section>
-    </section>
-    <section title="Captive Portal URL Formatting">
-      <t>The Session-ID and Policy Class is used along with the RFC
-      7710 URI received from DHCP or IPv6 RA to send the user to the
-      captive portal.</t>
-      
-      <figure>
-        <artwork><![CDATA[
-	RFC_7710_URI . SEP .
-	      'icmp_session=' . SESSION_ID . '&' .
-	      'policy_class=' . [POLICY_CLASS[,POLICY_CLASS]]
-	]]></artwork>
-      </figure>
-      <t><list style="hanging">
-          <t hangText="RFC_7710_URI">The URI received from DHCP or
-          IPv6 RA per RFC 7710.</t>
-	  <t hangText="SEP">If the RFC_7710_URI contains a '?', then
-	  SEP equals ampersand, otherwise a question mark.</t>
-	  <t hangText="SESSION_ID">The Session-ID value in integer
-	  format.</t>
-	  <t hangText="POLICY_CLASS">Zero or more Policy Class values
-	  gathers for the same Session-ID leading to the user
-	  notification..</t>
-      </list></t>
-      
-      <t>Examples:</t>
-      <figure>
-        <artwork><![CDATA[
-	https://wifi.domain.com/portal?icmp_session=10&policy_class=100
-	https://my.domain.com/?do=login&icmp_session=10&policy_class=100,20
-	]]></artwork>
-      </figure>
-      
-    </section>
-    <section title="Example Client / NAS Interactions">
-      <t>
-	<figure>
-          <artwork><![CDATA[
-	]]></artwork>
-	</figure>
-      </t>
     </section>
     <section title="IANA Considerations">
       <t>The IANA is requested to assign a Captive Portal ICMP Message
@@ -494,30 +358,36 @@
 
     <section title="Changes / Author Notes.">
       <t>[RFC Editor: Please remove this section before publication ]</t>
-
+      
+      <t>From -02 to 03.</t>
+      
+      <t><list style="symbols">
+        <t>Removed optional flag definitions to be defined later.</t>
+      </list></t>
+      
       <t>From -01 to 02.</t>
-
+      
       <t><list style="symbols">
-          <t>Added a new ICMP Type, redefined message payload and
-          flags, and introduces Codes/C-Types.</t>
-        </list></t>
-
+        <t>Added a new ICMP Type, redefined message payload and
+        flags, and introduces Codes/C-Types.</t>
+      </list></t>
+      
       <t>From -00 to 01.</t>
-
+      
       <t><list style="symbols">
-          <t>Changed the Captive Portal URL to a URI, and specificed that this
-          can ONLY contain a path element, which is appended to
-          http://&lt;gateway_ip&gt;. This is to prevent hijacking connections
-          to other addresses.</t>
-
-          <t>Then removed the entire URL / URI scheme entirely.</t>
-        </list></t>
-
+        <t>Changed the Captive Portal URL to a URI, and specificed that this
+        can ONLY contain a path element, which is appended to
+        http://&lt;gateway_ip&gt;. This is to prevent hijacking connections
+        to other addresses.</t>
+	
+        <t>Then removed the entire URL / URI scheme entirely.</t>
+      </list></t>
+      
       <t>From -genesis to -00.</t>
-
+      
       <t><list style="symbols">
-          <t>Initial text.</t>
-        </list></t>
+        <t>Initial text.</t>
+      </list></t>
     </section>
   </back>
 </rfc>

@@ -83,22 +83,17 @@ Table of Contents
    2.  Captive Portal ICMP . . . . . . . . . . . . . . . . . . . . .   4
      2.1.  Session-ID  . . . . . . . . . . . . . . . . . . . . . . .   4
      2.2.  Flags . . . . . . . . . . . . . . . . . . . . . . . . . .   4
-     2.3.  Validity  . . . . . . . . . . . . . . . . . . . . . . . .   5
-     2.4.  Delay . . . . . . . . . . . . . . . . . . . . . . . . . .   5
-     2.5.  Policy Class  . . . . . . . . . . . . . . . . . . . . . .   6
-     2.6.  Message Code/C-Type . . . . . . . . . . . . . . . . . . .   6
-     2.7.  Message Type  . . . . . . . . . . . . . . . . . . . . . .   6
-     2.8.  Extension Object  . . . . . . . . . . . . . . . . . . . .   7
-   3.  Captive Portal URL Formatting . . . . . . . . . . . . . . . .   8
-   4.  Example Client / NAS Interactions . . . . . . . . . . . . . .   9
-   5.  IANA Considerations . . . . . . . . . . . . . . . . . . . . .   9
-   6.  Security Considerations . . . . . . . . . . . . . . . . . . .   9
-   7.  Acknowledgements  . . . . . . . . . . . . . . . . . . . . . .  10
-   8.  References  . . . . . . . . . . . . . . . . . . . . . . . . .  10
-     8.1.  Normative References  . . . . . . . . . . . . . . . . . .  10
-     8.2.  Informative References  . . . . . . . . . . . . . . . . .  10
-   Appendix A.  Changes / Author Notes.  . . . . . . . . . . . . . .  11
-   Authors' Addresses  . . . . . . . . . . . . . . . . . . . . . . .  11
+     2.3.  Message Code/C-Type . . . . . . . . . . . . . . . . . . .   4
+     2.4.  Message Type  . . . . . . . . . . . . . . . . . . . . . .   5
+     2.5.  Extension Object  . . . . . . . . . . . . . . . . . . . .   5
+   3.  IANA Considerations . . . . . . . . . . . . . . . . . . . . .   7
+   4.  Security Considerations . . . . . . . . . . . . . . . . . . .   7
+   5.  Acknowledgements  . . . . . . . . . . . . . . . . . . . . . .   7
+   6.  References  . . . . . . . . . . . . . . . . . . . . . . . . .   7
+     6.1.  Normative References  . . . . . . . . . . . . . . . . . .   7
+     6.2.  Informative References  . . . . . . . . . . . . . . . . .   8
+   Appendix A.  Changes / Author Notes.  . . . . . . . . . . . . . .   8
+   Authors' Addresses  . . . . . . . . . . . . . . . . . . . . . . .   9
 
 1.  Introduction
 
@@ -107,7 +102,12 @@ Table of Contents
    authenticated, acknowledged an Acceptable Use Policy (AUP), or
    otherwise satisfied the requirements of the Captive Portal.
 
-
+   Today, notification of captivivity is implemented by intercepting
+   HTTP port 80 requests in order for the Captive Portal NAS to respond
+   with an HTTP redirect.  Depending on the captive portal
+   implementation, connections other than HTTP will either timeout
+   (silently packets dropped) or meet with a different, inaccurate,
+   error condition, for instance a TCP reset, for TCP connections, or
 
 
 
@@ -116,12 +116,6 @@ Bird & Kumari           Expires November 13, 2017               [Page 2]
 Internet-Draft     draft-wkumari-capport-icmp-unreach           May 2017
 
 
-   Today, notification of captivivity is implemented by intercepting
-   HTTP port 80 requests in order for the Captive Portal NAS to respond
-   with an HTTP redirect.  Depending on the captive portal
-   implementation, connections other than HTTP will either timeout
-   (silently packets dropped) or meet with a different, inaccurate,
-   error condition, for instance a TCP reset, for TCP connections, or
    ICMP Destination Unreachable using existing codes.  A typical
    implemenation might reject traffic not in the walled garden by
    returning an ICMP Destination Unreachable either Host or Network
@@ -163,6 +157,12 @@ Internet-Draft     draft-wkumari-capport-icmp-unreach           May 2017
    Legacy device  Device or operating system not compliant to this
       specification.
 
+   Captive Portal NAS  Network Access Server implementing Captive Portal
+      enforcement.
+
+   Capport NAS  A Captive Portal NAS supporting Capport standards.
+
+
 
 
 
@@ -171,11 +171,6 @@ Bird & Kumari           Expires November 13, 2017               [Page 3]
 
 Internet-Draft     draft-wkumari-capport-icmp-unreach           May 2017
 
-
-   Captive Portal NAS  Network Access Server implementing Captive Portal
-      enforcement.
-
-   Capport NAS  A Captive Portal NAS supporting Capport standards.
 
 2.  Captive Portal ICMP
 
@@ -206,99 +201,17 @@ Internet-Draft     draft-wkumari-capport-icmp-unreach           May 2017
 2.2.  Flags
 
    In Captive Portal ICMP Messages, a flags field contains bit flags for
-   optional payload data fields.  All data fields are unsigned 32bit
-   integers.
+   optional payload data fields.  The Flags field provides future
+   extensibility.
 
    Bit flags and their respective data fields:
 
           0 1 2 3 4 5 6 7
          +-+-+-+-+-+-+-+-+
-         |V|D|P|   zero  |
+         |    Reserved   |
          +-+-+-+-+-+-+-+-+
 
-   V - 1 bit  Validity
-
-   D - 1 bit  Delay
-
-
-
-
-Bird & Kumari           Expires November 13, 2017               [Page 4]
-
-Internet-Draft     draft-wkumari-capport-icmp-unreach           May 2017
-
-
-   P - 1 bit  Policy Class
-
-   Optional fields included in flags appear in the ICMP payload in the
-   same order as the respective bits.
-
-        0                   1                   2                   3
-        0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
-       +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-       |                        Validity (optional)                    |
-       +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-       |                         Delay (optional)                      |
-       +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-       |                     Policy-Class (optional)                   |
-       +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-
-2.3.  Validity
-
-   The Validity time, in milliseconds, that this result should be
-   considered valid and the receiver MAY NOT want to attempt to access
-   the same resource in the meantime.  During the Validity time, the
-   Capport NAS MAY choose to silently drop the packets of the same flow
-   5-tuple to selectively cause legacy clients to time-out connections.
-
-        0                   1                   2                   3
-        0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
-       +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-       |              Validity (milliseconds as uint32)                |
-       +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-
-   This value is designed to provide the reciever additional
-   information.  It is up to the receiver to "trust, but verify" and the
-   receiver may choose to not change any behavior based on this
-   information.  However, the receiver is warned of possibly different
-   behavor of the Capport NAS (e.g. silenty dropping similar packets)
-   during the Validity period.
-
-2.4.  Delay
-
-   The Delay time, in milliseconds, is the time in future when this
-   result should be considered valid.  This is used to give the receiver
-   advanced notice that a change in access policy is about to happen.
-
-        0                   1                   2                   3
-        0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
-       +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-       |                Delay (milliseconds as uint32)                 |
-       +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-
-
-
-
-Bird & Kumari           Expires November 13, 2017               [Page 5]
-
-Internet-Draft     draft-wkumari-capport-icmp-unreach           May 2017
-
-
-2.5.  Policy Class
-
-   The Policy Class is an unsigned integer that provides a "hint" to the
-   captive portal.  When a client is specifically responding to a
-   Captive Portal ICMP message and is launching a browser, the Policy
-   Class is given to the portal as a reason for the visitor being
-   redirected to the the captive portal.
-
-        0                   1                   2                   3
-        0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
-       +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-       |                      Policy Class (uint32)                    |
-       +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-
-2.6.  Message Code/C-Type
+2.3.  Message Code/C-Type
 
    Captive Portal Message Code and C-Types:
 
@@ -308,7 +221,14 @@ Internet-Draft     draft-wkumari-capport-icmp-unreach           May 2017
 
    3  Capport Suggested - Warning (packet not dropped)
 
-2.7.  Message Type
+
+
+Bird & Kumari           Expires November 13, 2017               [Page 4]
+
+Internet-Draft     draft-wkumari-capport-icmp-unreach           May 2017
+
+
+2.4.  Message Type
 
    The Captive Portal ICMP Type message is specifically for Capport ICMP
    Compliant devices.  It is expected that Legacy devices will ignore
@@ -319,26 +239,15 @@ Internet-Draft     draft-wkumari-capport-icmp-unreach           May 2017
        +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
        |      Type     |      Code     |          Checksum             |
        +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-       |V|D|P|  zero   |     Length    |          Session-ID           |
+       |      Flags    |     Length    |          Session-ID           |
        +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
        |      Internet Header + leading octets of original datagram    |
        |                                                               |
        |                           //                                  |
        |                                                               |
        +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-       |                        Validity (optional)                    |
+       ~             Optional Extensions defined by Flags              ~
        +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-       |                         Delay (optional)                      |
-       +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-       |                     Policy-Class (optional)                   |
-       +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-
-
-
-Bird & Kumari           Expires November 13, 2017               [Page 6]
-
-Internet-Draft     draft-wkumari-capport-icmp-unreach           May 2017
-
 
    As shown in the figure above, the Captive Portal Flags and Session-ID
    and part of the ICMP header.  The optional fields are in the ICMP
@@ -347,7 +256,7 @@ Internet-Draft     draft-wkumari-capport-icmp-unreach           May 2017
 
    Length  Number of 4 byte words of original datagram.
 
-2.8.  Extension Object
+2.5.  Extension Object
 
    This document defines an extension object that can be appended to
    selected multi-part ICMP messages ([RFC4884]).  This extension
@@ -363,38 +272,30 @@ Internet-Draft     draft-wkumari-capport-icmp-unreach           May 2017
    When used in an Extension Object, the Captive Portal ICMP data fields
    are packed into an extension structure as shown below.
 
+
+
+
+
+
+
+
+Bird & Kumari           Expires November 13, 2017               [Page 5]
+
+Internet-Draft     draft-wkumari-capport-icmp-unreach           May 2017
+
+
         0                   1                   2                   3
         0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
        +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-       |V|D|P|       Reserved          |         Session-ID            |
+       |     Flags    |    Reserved    |         Session-ID            |
        +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-       |                        Validity (optional)                    |
-       +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-       |                         Delay (optional)                      |
-       +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-       |                     Policy-Class (optional)                   |
+       ~             Optional Extensions defined by Flags              ~
        +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
    The following figure depicts the Destination Unreachable message with
    Captive Portal Extension.  It must be preceded by an ICMP Extension
    Structure Header and an ICMP Object Header.  Both are defined in
    [RFC4884].
-
-
-
-
-
-
-
-
-
-
-
-
-Bird & Kumari           Expires November 13, 2017               [Page 7]
-
-Internet-Draft     draft-wkumari-capport-icmp-unreach           May 2017
-
 
         0                   1                   2                   3
         0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
@@ -408,17 +309,13 @@ Internet-Draft     draft-wkumari-capport-icmp-unreach           May 2017
        |                           //                                  |
        |                                                               |
        +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-       |Version|      (Reserved)       |           Checksum            |
+       |Version|       Reserved        |           Checksum            |
        +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
        |             Length-B          |   Class-Num   |   C-Type      |
        +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-       |V|D|P|       Reserved          |         Session-ID            |
+       |     Flags    |    Reserved    |         Session-ID            |
        +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-       |                        Validity (optional)                    |
-       +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-       |                         Delay (optional)                      |
-       +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-       |                     Policy-Class (optional)                   |
+       ~             Optional Extensions defined by Flags              ~
        +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
    Type  Set to 3 for Destination Unreachable.
@@ -433,44 +330,21 @@ Internet-Draft     draft-wkumari-capport-icmp-unreach           May 2017
 
    Class-Num  Set to Captive Portal Class-Num.
 
-   C-Type  See section 2.6.
-
-3.  Captive Portal URL Formatting
-
-   The Session-ID and Policy Class is used along with the RFC 7710 URI
-   received from DHCP or IPv6 RA to send the user to the captive portal.
-
-       RFC_7710_URI . SEP .
-             'icmp_session=' . SESSION_ID . '&' .
-             'policy_class=' . [POLICY_CLASS[,POLICY_CLASS]]
+   C-Type  See section 2.4.
 
 
 
 
-Bird & Kumari           Expires November 13, 2017               [Page 8]
+Bird & Kumari           Expires November 13, 2017               [Page 6]
 
 Internet-Draft     draft-wkumari-capport-icmp-unreach           May 2017
 
 
-   RFC_7710_URI  The URI received from DHCP or IPv6 RA per RFC 7710.
+   Flags  Extension for future use.
 
-   SEP  If the RFC_7710_URI contains a '?', then SEP equals ampersand,
-      otherwise a question mark.
+   Session-ID  See section 2.1.
 
-   SESSION_ID  The Session-ID value in integer format.
-
-   POLICY_CLASS  Zero or more Policy Class values gathers for the same
-      Session-ID leading to the user notification..
-
-   Examples:
-
-     https://wifi.domain.com/portal?icmp_session=10&policy_class=100
-     https://my.domain.com/?do=login&icmp_session=10&policy_class=100,20
-
-4.  Example Client / NAS Interactions
-
-
-5.  IANA Considerations
+3.  IANA Considerations
 
    The IANA is requested to assign a Captive Portal ICMP Message Type,
    as well as Code values defined in section 2.6..
@@ -482,7 +356,7 @@ Internet-Draft     draft-wkumari-capport-icmp-unreach           May 2017
    The IANA is also requested to form and administer the corresponding
    class sub-type (C-Type) space per section 2.6.
 
-6.  Security Considerations
+4.  Security Considerations
 
    The newly defined ICMP extension mearly annotates existing ICMP
    Destination Unreachable messages to inform users why their connection
@@ -501,26 +375,26 @@ Internet-Draft     draft-wkumari-capport-icmp-unreach           May 2017
    the NAS has is to terminate connections and enforce the captive
    portal, which is arguably more annoying.
 
-
-
-Bird & Kumari           Expires November 13, 2017               [Page 9]
-
-Internet-Draft     draft-wkumari-capport-icmp-unreach           May 2017
-
-
-7.  Acknowledgements
+5.  Acknowledgements
 
    The authors wish to thank the members of the capport mailing list,
    Dave Dolson, Vincent van Dam, Martin Thomson, Erik Kline, Kyle
    Larose, and the authors of RFC4950 (especially Ron Bonica).
 
-8.  References
+6.  References
 
-8.1.  Normative References
+6.1.  Normative References
 
    [RFC0792]  Postel, J., "Internet Control Message Protocol", STD 5,
               RFC 792, DOI 10.17487/RFC0792, September 1981,
               <http://www.rfc-editor.org/info/rfc792>.
+
+
+
+Bird & Kumari           Expires November 13, 2017               [Page 7]
+
+Internet-Draft     draft-wkumari-capport-icmp-unreach           May 2017
+
 
    [RFC1122]  Braden, R., Ed., "Requirements for Internet Hosts -
               Communication Layers", STD 3, RFC 1122, DOI 10.17487/
@@ -547,26 +421,20 @@ Internet-Draft     draft-wkumari-capport-icmp-unreach           May 2017
               Advertisements (RAs)", RFC 7710, DOI 10.17487/RFC7710,
               December 2015, <http://www.rfc-editor.org/info/rfc7710>.
 
-8.2.  Informative References
+6.2.  Informative References
 
    [I-D.ietf-sidr-iana-objects]
               Manderson, T., Vegoda, L., and S. Kent, "RPKI Objects
               issued by IANA", draft-ietf-sidr-iana-objects-03 (work in
               progress), May 2011.
 
-
-
-
-
-
-Bird & Kumari           Expires November 13, 2017              [Page 10]
-
-Internet-Draft     draft-wkumari-capport-icmp-unreach           May 2017
-
-
 Appendix A.  Changes / Author Notes.
 
    [RFC Editor: Please remove this section before publication ]
+
+   From -02 to 03.
+
+   o  Removed optional flag definitions to be defined later.
 
    From -01 to 02.
 
@@ -574,6 +442,15 @@ Appendix A.  Changes / Author Notes.
       introduces Codes/C-Types.
 
    From -00 to 01.
+
+
+
+
+
+Bird & Kumari           Expires November 13, 2017               [Page 8]
+
+Internet-Draft     draft-wkumari-capport-icmp-unreach           May 2017
+
 
    o  Changed the Captive Portal URL to a URI, and specificed that this
       can ONLY contain a path element, which is appended to
@@ -615,5 +492,16 @@ Authors' Addresses
 
 
 
-Bird & Kumari           Expires November 13, 2017              [Page 11]
+
+
+
+
+
+
+
+
+
+
+
+Bird & Kumari           Expires November 13, 2017               [Page 9]
 ```
