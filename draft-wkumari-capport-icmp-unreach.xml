@@ -56,7 +56,7 @@
       this specification and provides flow 5-tuple specific
       notifications from the Captive Portal NAS.</t>
 
-      <t>Further, This document defines a multi-part ICMP extension to
+      <t>Further, this document defines a multi-part ICMP extension to
       ICMP Destination Unreachable messages to signal, not only that
       the packet was dropped, but that it was dropped due to an Access
       Policy requiring Captive Portal interaction. Legacy clients
@@ -221,7 +221,7 @@
 	</figure>
 
 	<t>As shown in the figure above, the Captive Portal Flags and
-	Session-ID and part of the ICMP header. The optional fields
+	Session-ID are part of the ICMP header. The optional fields
 	are in the ICMP payload, past the required original datagram
 	headers of a length defined by Length.</t>
 
