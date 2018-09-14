@@ -3,74 +3,64 @@
 <!ENTITY rfc2119 PUBLIC "" ".//reference.RFC.2119.xml">
 ]>
 <!-- WK: Set category, IPR, docName -->
-<rfc category="info" docName="draft-wkumari-capport-icmp-unreach-01"
+<rfc category="info" docName="draft-wkumari-capport-icmp-unreach-02"
      ipr="trust200902">
   <?xml-stylesheet type='text/xsl' href='rfc2629.xslt' ?>
-
   <?rfc toc="yes" ?>
-
   <?rfc symrefs="yes" ?>
-
   <?rfc sortrefs="yes"?>
-
   <?rfc iprnotified="no" ?>
-
   <?rfc strict="yes"?>
-
   <?rfc compact="yes" ?>
-
   <front>
     <!-- WK: Set long title. -->
 
-    <title abbrev="draft-wkumari-capport-icmp-unreach">Captive Portal ICMP
-    Destination Unreachable</title>
-
+    <title abbrev="draft-wkumari-capport-icmp-unreach">
+      Captive Portal ICMP Messages
+    </title>
+    
     <author fullname="David Bird" initials="D." surname="Bird">
       <organization>Google</organization>
-
       <address>
         <postal>
           <street>1600 Amphitheatre Parkway</street>
-
           <city>Mountain View, CA</city>
-
           <code>94043</code>
-
           <country>US</country>
         </postal>
-
         <email>dbird@google.com</email>
       </address>
     </author>
-
+    
     <author fullname="Warren Kumari" initials="W." surname="Kumari">
       <organization>Google</organization>
-
       <address>
         <postal>
           <street>1600 Amphitheatre Parkway</street>
-
           <city>Mountain View, CA</city>
-
           <code>94043</code>
-
           <country>US</country>
         </postal>
-
         <email>warren@kumari.net</email>
       </address>
     </author>
 
-    <date day="29" month="April" year="2015"/>
+    <date day="12" month="May" year="2017"/>
 
     <area>template</area>
-
     <workgroup>template</workgroup>
 
     <abstract>
-      <t>This document defines a multi-part ICMP extension to ICMP Destination
-      Unreachable messages to signal that a user is behind a Captive
-      Portal.</t>
+      <t>This document defines a new ICMP Type for Captive Portal
+      Messages. The ICMP Type will only be known to clients supporting
+      this specification and provides flow 5-tuple specific
+      notifications from the Captive Portal NAS.</t>
+
+      <t>Further, this document defines a multi-part ICMP extension to
+      ICMP Destination Unreachable messages to signal, not only that
+      the packet was dropped, but that it was dropped due to an Access
+      Policy requiring Captive Portal interaction. Legacy clients
+      will only be processing the ICMP Destination Unreachable.</t>
 
       <t>[ Editor note: The IETF is currently discussing improvements in
       captive portal interactions and user experience improvements. See:
@@ -78,7 +68,7 @@
 
       <t>[RFC Editor: Please remove this before publication. This document is
       being stored in github at
-      https://github.com/wkumari/draft-wkumari-capport-icmp-unreach . Authors
+      https://github.com/wlanmac/draft-wkumari-capport-icmp-unreach . Authors
       gratefully accept pull requests, and keep the latest (edit buffer)
       versions there, so commenters can follow along at home.]</t>
     </abstract>
@@ -86,32 +76,47 @@
 
   <middle>
     <section title="Introduction">
-      <t>Captive Portals work by blocking (or redirecting) communications
-      outside of a "walled garden" until the user has authenticated and / or
-      acknowledged an Acceptable Use Policy (AUP). Depending on the captive
-      portal implementation, connections other than HTTP will either timeout
-      (packets dropped) or meet with a different, inaccurate, error condition
-      (like a TCP reset or ICMP Destination Unreachable with existing
-      codes).</t>
+      <t>Captive Portals work by blocking some and redirecting other
+      communications outside of a "walled garden" until the user has
+      either authenticated, acknowledged an Acceptable Use Policy
+      (AUP), or otherwise satisfied the requirements of the Captive
+      Portal.</t>
 
-      <t>A current option for captive portal networks is to reject traffic not
-      in the walled garden returning the Destination Unreachable either Host
-      or Network Administratively Prohibited. However, these codes are
-      typically permanent policies and do not specifically indicate a captive
-      portal is in use.</t>
+      <t>Today, notification of captivivity is implemented by
+      intercepting HTTP port 80 requests in order for the Captive
+      Portal NAS to respond with an HTTP redirect. Depending on the
+      captive portal implementation, connections other than HTTP will
+      either timeout (silently packets dropped) or meet with a
+      different, inaccurate, error condition, for instance a TCP
+      reset, for TCP connections, or ICMP Destination Unreachable
+      using existing codes. A typical implemenation might reject
+      traffic not in the walled garden by returning an ICMP
+      Destination Unreachable either Host or Network Administratively
+      Prohibited. However, these codes are typically permanent
+      policies and do not specifically indicate a captive portal is in
+      use.</t>
 
-      <t>This document defines an extension object that can be appended to
-      selected multi-part ICMP messages to inform the user that they are
-      behind a captive portal. This informs the user after they have attempted
-      an initial connection and is generated by the Captive Portal NAS
-      itself.</t>
+      <t>This document defines a new ICMP Type for Captive Portal. The
+      Captive Portal ICMP Type can be used to send flow 5-tuple
+      specific notifications to user devices. As a new ICMP type, it
+      is expected to be ignored by legacy devices.</t>
 
-      <t>[ Editor note: This is complementary, but solves a different problem
-      to: https://tools.ietf.org/html/draft-wkumari-dhc-capport-12 -
-      wkumari-dhc-capport provides information from a DHCP server (and so
-      doesn't need any changes to deployed CPs), and provides information
-      *before* the client attempts a connection. It does not, however, have a
-      way of noting that an existing connection has been interrupted.]</t>
+      <t>This document also defines an Extension Object that can be
+      appended to selected multi-part ICMP messages to inform the user
+      device that they are behind a captive portal, in addition to the
+      underlying ICMP information. Devices able to understand the
+      extension get extra information about the captive portal access
+      policy, whereas legacy devices just understand the underlying
+      ICMP message.</t>
+
+      <t>The Captive Portal and Destination Unreachable types provide
+      the Captive Portal NAS options in terms of what notifications
+      legacy devices can and should understand.</t>
+
+      <t>The Captive Portal ICMP Messages only provide
+      notification. They do not provide any configuration. For that,
+      we use <xref target="RFC7710"/> and the Captive Portal URI it
+      provides.</t>
 
       <section title="Requirements notation">
         <t>The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
@@ -119,121 +124,232 @@
         document are to be interpreted as described in <xref
         target="RFC2119"/>.</t>
       </section>
+
+      <section title="Terminology">
+	<t><list style="hanging">
+          <t hangText="Capport ICMP device">Device or operating system
+          compliant to this specification.</t>
+          <t hangText="Legacy device">Device or operating system not
+          compliant to this specification.</t>
+          <t hangText="Captive Portal NAS">Network Access Server
+          implementing Captive Portal enforcement.</t>
+          <t hangText="Capport NAS">A Captive Portal NAS supporting
+          Capport standards.</t>
+	</list></t>
+      </section>
     </section>
 
-    <section title="ICMP Dest Unreachable Captive Portal Object">
-      <t>This document defines an extension object that can be appended to
-      selected multi-part ICMP messages (<xref target="RFC4884"/>). This
-      extension permits Captive Portal (CP) NAS devices to inform user devices
-      that their connection has been blocked by the Captive Portal NAS.</t>
+    <section title="Captive Portal ICMP">
+      <t>Captive Portal ICMP messages come in two flavors. Messages
+      can be sent using the Captive Portal ICMP Type or they can be
+      sent as an ICMP Extension to an existing ICMP Type, such as
+      Destination Unreachable. Data is encoded into the packet slightly
+      differently in each case, however, the field formats remain
+      consistent. All fields are in network byte order.</t>
+      
+      <t>Capport ICMP devices MUST support <xref
+      target="RFC7710"/>.</t>
 
-      <t>The Dest Unreachable Captive Portal Object can be appended to the
-      ICMP Destination Unreachable messages. Figure 1 depicts the Dest
-      Unreachable Captive Portal Object. It must be preceded by an ICMP
-      Extension Structure Header and an ICMP Object Header. Both are defined
-      in <xref target="RFC4884"/>.</t>
+      <section title="Session-ID">
+        <t>An unsigned short session identifier that groups ICMP
+        messages. ICMP messages containing the same value MUST be
+        assumed to be part of the same access policy. Any change in
+        this value between ICMP messages from the same source IP
+        address MUST be considered by the client to mean a change in
+        access policy has occurred and previous notifications are no
+        longer valid.</t>
 
-      <figure>
-        <artwork><![CDATA[    0                   1                   2                   3
-      0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
-      +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-      |W|  Reserved   |         Validity (seconds)                    |
-      +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-
-]]></artwork>
-      </figure>
-
-      <t><list style="hanging">
-          <t hangText="W  - 1 bit">Warning. Indicates that the Validity refers
-          to when the service will be interrupted. Note that the
-          &ldquo;offending&rdquo; traffic was forwarded, not dropped.</t>
-
-          <t hangText="Validity - 24 bits">Time, in seconds, that this result
-          should be considered valid (and the OS should not attempt to access
-          the same resource in the meantime).</t>
+	<figure>
+          <artwork><![CDATA[
+	   0                   1           
+	   0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 
+	  +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+	  |          Session-ID           |
+	  +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+	  ]]></artwork>
+	</figure>
+	
+      </section>
+      <section title="Flags">
+	<t>In Captive Portal ICMP Messages, a flags field contains bit
+	flags for optional payload data fields. The Flags field
+	provides future extensibility.</t>
+	
+	<t>Bit flags and their respective data fields:</t>
+	
+	<figure>
+          <artwork><![CDATA[
+	   0 1 2 3 4 5 6 7 
+	  +-+-+-+-+-+-+-+-+
+	  |    Reserved   |
+	  +-+-+-+-+-+-+-+-+
+	  ]]></artwork>
+	</figure>
+      </section>
+      <section title="Message Code/C-Type">
+        <t>Captive Portal Message Code and C-Types:
+	<list style="hanging">
+          <t hangText="1">Capport Required (packet dropped)</t>
+          <t hangText="2">Capport Suggested - QoS Overflow (packet
+          dropped)</t>
+          <t hangText="3">Capport Suggested - Warning (packet not
+          dropped)</t>
         </list></t>
+      </section>
+      <section title="Message Type">
+	<t>The Captive Portal ICMP Type message is specifically for
+	Capport ICMP Compliant devices. It is expected that Legacy
+	devices will ignore such messages.</t>
 
-      <t>Editor note / questions. We are trying to get some feedback on A:
-      this general idea and B: this implementation.</t>
+	<figure>
+          <artwork><![CDATA[
+	   0                   1                   2                   3
+	   0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
+	  +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+	  |      Type     |      Code     |          Checksum             |
+	  +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+	  |      Flags    |     Length    |          Session-ID           |
+	  +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+	  |      Internet Header + leading octets of original datagram    |
+	  |                                                               |
+	  |                           //                                  |
+	  |                                                               |
+	  +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+	  ~             Optional Extensions defined by Flags              ~
+	  +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+	  ]]></artwork>
+	</figure>
 
-      <t><list style="hanging">
-          <t>Some open questions.</t>
+	<t>As shown in the figure above, the Captive Portal Flags and
+	Session-ID are part of the ICMP header. The optional fields
+	are in the ICMP payload, past the required original datagram
+	headers of a length defined by Length.</t>
 
-          <t hangText="W bit or C-Type">We have currently specified a single
-          bit (W) to indicate that the remaining lease time is running low,
-          and the the connection will be interrupted sometime "soon". We
-          could, instead, use a differnt C-Type. I think a bit is cleaner (and
-          we have reserved 7 bits for future flags), but could be convinced
-          (or, better yet, bribed) I'm wrong. Or that the whole "warning" idea
-          is a bad one...</t>
+	<t><list style="hanging">
+          <t hangText="Length">Number of 4 byte words of original datagram.</t>
+	</list></t>
+      </section>
+      <section title="Extension Object">
+	<t>This document defines an extension object that can be
+	appended to selected multi-part ICMP messages (<xref
+	target="RFC4884"/>). This extension permits the Capport NAS to
+	inform Capport ICMP Compliant devices that their connection
+	has been blocked due to an Access Policy requiring interaction
+	with the Captive Portal.</t>
+	
+	<t>The Captive Portal Extension Object can be appended to the
+	ICMP Destination Unreachable messages. When Legacy devices
+	receive such messages, they will only understand the
+	Destination Unreachable, ignoring the extensions.</t>
 
-          <t hangText="Legacy interaction">If we *do* return e.g ICMP
-          Destination Unreachable, Communication Administratively Prohibited
-          to a "legacy" (non-Dest Unreachable Captive Portal Object aware)
-          client with the 'W' bit set, what happens? In the testing I did,
-          nothing bad seemed to happen, but I *could* see that some hosts may
-          stop sending to that address, or...</t>
-
-          <t hangText="General concept">Is this idea useful?</t>
-        </list></t>
+	<t>When used in an Extension Object, the Captive Portal ICMP
+	data fields are packed into an extension structure as shown
+	below.</t>
+	
+	<figure>
+          <artwork><![CDATA[
+	   0                   1                   2                   3
+	   0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
+	  +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+	  |     Flags    |    Reserved    |         Session-ID            |
+	  +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+	  ~             Optional Extensions defined by Flags              ~
+	  +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+	  ]]></artwork>
+	</figure>
+	
+	<t>The following figure depicts the Destination Unreachable
+	message with Captive Portal Extension. It must be preceded by
+	an ICMP Extension Structure Header and an ICMP Object
+	Header. Both are defined in <xref target="RFC4884"/>.</t>
+	
+	<figure>
+          <artwork><![CDATA[
+	   0                   1                   2                   3
+	   0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
+	  +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+	  |     Type      |      Code     |          Checksum             |
+	  +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+	  |     unused    |    Length-A   |         Next-Hop MTU*         |
+	  +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+	  |      Internet Header + leading octets of original datagram    |
+	  |                                                               |
+	  |                           //                                  |
+	  |                                                               |
+	  +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+	  |Version|       Reserved        |           Checksum            |
+	  +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+	  |             Length-B          |   Class-Num   |   C-Type      |
+	  +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+	  |     Flags    |    Reserved    |         Session-ID            |
+	  +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+	  ~             Optional Extensions defined by Flags              ~
+	  +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+	  ]]></artwork>
+	</figure>
+	
+	<t><list style="hanging">
+          <t hangText="Type">Set to 3 for Destination Unreachable.</t>
+          <t hangText="Code">Can be any value Code value for Type.</t>
+          <t hangText="Length-A">Length, in 4 byte words, of original datagram.</t>
+          <t hangText="Version">Set to version 2, per RFC 4884.</t>
+          <t hangText="Length-B">Length of extension.</t>
+          <t hangText="Class-Num">Set to Captive Portal Class-Num.</t>
+          <t hangText="C-Type">See section 2.4.</t>
+          <t hangText="Flags">Extension for future use.</t>
+          <t hangText="Session-ID">See section 2.1.</t>
+	</list></t>
+	
+      </section>
     </section>
-
     <section title="IANA Considerations">
-      <t>The IANA is requested to assign a Class-Num identifier for the Dest
-      Unreachable Captive Portal Object from the ICMP Extension Object Classes
-      and Class Sub-types registry.</t>
+      <t>The IANA is requested to assign a Captive Portal ICMP Message
+      Type, as well as Code values defined in section 2.6..</t>
+
+      <t>The IANA is also requested to assign a Class-Num identifier
+      for the Captive Portal Extension Object from the ICMP Extension
+      Object Classes and Class Sub-types registry.</t>
 
       <t>The IANA is also requested to form and administer the corresponding
-      class sub-type (C-Type) space, as follows:</t>
-
-      <t><list style="hanging">
-          <t>Dest Unreachable Captive Portal Sub-types:</t>
-
-          <t hangText="0">Reserved.</t>
-
-          <t hangText="1">This message format.</t>
-
-          <t hangText="0x02-0xF6 ">Available for assignment</t>
-
-          <t hangText="0xF7-0xFF">Reserved for private use</t>
-        </list> C-Type values are assignable on a first-come-first-serve
-      (FCFS) basis.</t>
-
-      <t>[ Editor note: Currently we are not using the C-Type for anything,
-      but I filled this in anyway. Probably we would overload it at a version
-      identifier type thing, but it could also allow further extension, for
-      example, a pointer to a status page. ]</t>
+      class sub-type (C-Type) space per section 2.6.</t>
     </section>
 
     <section anchor="security" title="Security Considerations">
-      <t>This method simply annotates existing ICMP Destination Unreachable
-      messages to inform users why their connection was blocked. This
-      technique can be used to inform captive portal detection probe software
-      that there is a captive portal present (and potentially to connect to
-      the URL handed out using draft-wkumari-dhc-capport. We anticipate that
-      there will be a new solution devised (such as a well known URL / URI on
-      captive portals) to allow the user / captive portal probe to do
-      sometyhing more useful with this information.</t>
+      <t>The newly defined ICMP extension mearly annotates existing
+      ICMP Destination Unreachable messages to inform users why their
+      connection was blocked. This technique can be used to inform
+      captive portal detection probe software that a captive portal,
+      specifically, is the reason traffic is blocked. Together with
+      RFC 7710 providing configuration in the form of Captive Portal
+      URL, Capport ICMP provides an improvement over the current
+      man-in-the-middle approach to notification and enforcement of
+      captive portals.</t>
+      <t>The newly defined ICMP Type for Capport is a non-terminal
+      message from the network that poses no additional threat over
+      existing ICMP connection terminating messages. While Capport
+      ICMP may present a new kind of annoyance for the user, this can
+      be mitigated by intelligent capport detection software.
+      Moreover, the other option the NAS has is to terminate
+      connections and enforce the captive portal, which is arguably
+      more annoying.</t>
     </section>
 
     <section title="Acknowledgements">
-      <t>The authors wish to thank the authors of RFC4950 (especially Ron
-      Bonica ) - I stole much of his text when writing the extension
-      definition.</t>
+      <t>The authors wish to thank the members of the capport mailing
+      list, Dave Dolson, Vincent van Dam, Martin Thomson, Erik Kline,
+      Kyle Larose, and the authors of RFC4950 (especially Ron
+      Bonica).</t>
     </section>
   </middle>
 
   <back>
     <references title="Normative References">
       <?rfc include='reference.RFC.2119'?>
-
       <?rfc include='reference.RFC.1122'?>
-
       <?rfc include='reference.RFC.0792'?>
-
       <?rfc include='reference.RFC.4884'?>
-
       <?rfc include='reference.RFC.3986'?>
+      <?rfc include='reference.RFC.7710'?>
     </references>
 
     <references title="Informative References">
@@ -242,23 +358,36 @@
 
     <section title="Changes / Author Notes.">
       <t>[RFC Editor: Please remove this section before publication ]</t>
-
+      
+      <t>From -02 to 03.</t>
+      
+      <t><list style="symbols">
+        <t>Removed optional flag definitions to be defined later.</t>
+      </list></t>
+      
+      <t>From -01 to 02.</t>
+      
+      <t><list style="symbols">
+        <t>Added a new ICMP Type, redefined message payload and
+        flags, and introduces Codes/C-Types.</t>
+      </list></t>
+      
       <t>From -00 to 01.</t>
-
+      
       <t><list style="symbols">
-          <t>Changed the Captive Portal URL to a URI, and specificed that this
-          can ONLY contain a path element, which is appened to
-          http://&lt;gateway_ip&gt;. This is to prevent hijacking connections
-          to other addresses.</t>
-
-          <t>Then removed the entire URL / URI scheme entirely.</t>
-        </list></t>
-
+        <t>Changed the Captive Portal URL to a URI, and specificed that this
+        can ONLY contain a path element, which is appended to
+        http://&lt;gateway_ip&gt;. This is to prevent hijacking connections
+        to other addresses.</t>
+	
+        <t>Then removed the entire URL / URI scheme entirely.</t>
+      </list></t>
+      
       <t>From -genesis to -00.</t>
-
+      
       <t><list style="symbols">
-          <t>Initial text.</t>
-        </list></t>
+        <t>Initial text.</t>
+      </list></t>
     </section>
   </back>
 </rfc>
