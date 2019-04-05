@@ -141,7 +141,7 @@ Internet-Draft     draft-wkumari-capport-icmp-unreach         April 2015
    Extension Structure Header and an ICMP Object Header.  Both are
    defined in [RFC4884].
 
-     0                   1                   2                   3
+       0                   1                   2                   3
        0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
        +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
        |W|  Reserved   |         Validity (seconds)                    |
@@ -234,9 +234,9 @@ Internet-Draft     draft-wkumari-capport-icmp-unreach         April 2015
 
 5.  Acknowledgements
 
-   The authors wish to thank the authors of RFC4950 (especially Ron
-   Bonica ) - I stole much of his text when writing the extension
-   definition.
+   The authors wish to thank the Yaron Sheffer and the authors of
+   RFC4950 (especially Ron Bonica ) - I stole much of his text when
+   writing the extension definition.
 
 6.  References
 

@@ -134,7 +134,7 @@
       in <xref target="RFC4884"/>.</t>
 
       <figure>
-        <artwork><![CDATA[    0                   1                   2                   3
+        <artwork><![CDATA[      0                   1                   2                   3
       0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
       +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
       |W|  Reserved   |         Validity (seconds)                    |
@@ -217,9 +217,9 @@
     </section>
 
     <section title="Acknowledgements">
-      <t>The authors wish to thank the authors of RFC4950 (especially Ron
-      Bonica ) - I stole much of his text when writing the extension
-      definition.</t>
+      <t>The authors wish to thank the Yaron Sheffer and the authors of
+      RFC4950 (especially Ron Bonica ) - I stole much of his text when writing
+      the extension definition.</t>
     </section>
   </middle>
 
